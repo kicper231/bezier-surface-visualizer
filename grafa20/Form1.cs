@@ -124,23 +124,50 @@ namespace grafa20
             //    }
             //}
 
-            
+
             stopwatch.Start();
-            //  Parrarel Foreach(przestrzen.trojkaty, FillPolygon);
-            Parallel.ForEach(przestrzen.trojkaty, FillPolygon);
-            
-            //foreach(var trojkat in przestrzen.trojkaty)
+            // Parrarel.Foreach(przestrzen.trojkaty, FillPolygon);
+            //Parallel.ForEach(przestrzen.trojkaty, FillPolygon);
+            //int i = 0;
+            //foreach (var trojkat in przestrzen.trojkaty)
             //{
+            //    if(i%2==0)
             //    FillPolygon(trojkat);
+            //    i++;
             //}
-            // foreach(var trojkat in przestrzen.trojkaty)
+            Parallel.ForEach(przestrzen.trojkaty, trojkat =>
+            {
+                List<Segment> lista = new List<Segment>
+    {
+        new Segment(trojkat.P1, trojkat.P2),
+        new Segment(trojkat.P2, trojkat.P3),
+        new Segment(trojkat.P3, trojkat.P1)
+    };
+
+                FillPolygon2(lista);
+            });
+
+            //int i = 0;
+            //foreach (var trojkat in przestrzen.trojkaty)
             //{
-            //    List<Segment> lista = new List<Segment>();
-            //    lista.Add(new Segment(trojkat.P1, trojkat.P2));
-            //    lista.Add(new Segment(trojkat.P2, trojkat.P3));
-            //    lista.Add(new Segment(trojkat.P3, trojkat.P1));
-            //  //  FillPolygon2(lista);
+            //    if(trojkat.P1.X==1)
+            //    { i = i; }
+            //    if (i % 2 == 1)
+            //    {
+            //        List<Segment> lista = new List<Segment>
+            //{
+            //    new Segment(trojkat.P1, trojkat.P2),
+            //    new Segment(trojkat.P2, trojkat.P3),
+            //    new Segment(trojkat.P3, trojkat.P1)
+            //};
+
+            //        FillPolygon2(lista);
+            //    }
+            //    i++;
             //}
+
+            //            FillPolygon2(lista);
+            //        });
 
             stopwatch.Stop();
             label2.Text = $"{stopwatch.ElapsedMilliseconds}";
@@ -157,7 +184,7 @@ namespace grafa20
             //{
             //    g = g;
             //}
-              
+
 
             float ymax = trojkat.P1.Y;
             float ymin = trojkat.P1.Y;
@@ -166,7 +193,7 @@ namespace grafa20
             Vector3 b = trojkat.P2;
             Vector3 c = trojkat.P3;
 
-            if (a.X == 0.5&&a.Y==0.5)
+            if (a.X == 0.5 && a.Y == 0.5)
                 a.X = a.X;
 
             List<Kubel> aktualna = new List<Kubel>();
@@ -229,32 +256,32 @@ namespace grafa20
             ObsluzSegment(trojkat.P3, trojkat.P1);
             int podzial = przestrzen.podzial;
             int ax, ay, bx, by, cx, cy;
-            
-
-                ax = (int)(a.X * 3 * podzial);
 
 
-
-                ay = (int)(a.Y * 3 * podzial);
+            ax = (int)(a.X * 3 * podzial);
 
 
 
-                bx = (int)(b.X * 3 * podzial);
+            ay = (int)(a.Y * 3 * podzial);
 
 
 
-                by = (int)(b.Y * 3 * podzial);
+            bx = (int)(b.X * 3 * podzial);
 
 
 
-                cx = (int)(c.X * 3 * podzial);
+            by = (int)(b.Y * 3 * podzial);
+
+
+
+            cx = (int)(c.X * 3 * podzial);
 
 
 
 
-                cy = (int)(c.Y * 3 * podzial);
+            cy = (int)(c.Y * 3 * podzial);
 
-            
+
 
 
 
@@ -345,101 +372,100 @@ namespace grafa20
         }
 
 
-        //public void FillPolygon2(List<Segment> krawedzie)
-        //{
-        //    float ymin1 = float.MinValue;
-        //    float ymax1 = float.MaxValue;
-
-            
-        //    foreach (var segment in krawedzie)
-        //    {
-        //        if (segment.ps.Y > ymax1) ymax1 = segment.ps.Y;
-        //        if (segment.pe.Y > ymax1) ymax1 = segment.pe.Y;
-        //        if (segment.ps.Y < ymin1) ymin1 = segment.ps.Y;
-        //        if (segment.pe.Y < ymin1) ymin1 = segment.pe.Y;
-        //    }
-
-        //    int ymin = doint(ymin1);
-        //    int ymax = doint(ymax1);
-
-        //    List<Kubel> aktualna = new List<Kubel>();
-        //    int y =  ymin;
-        //    List<Kubel>[] kubelki = new List<Kubel>[ymax -  ymin + 1];
-        //    int licznik = 0;
-
-        //    foreach (var segment in krawedzie)
-        //    {
-        //        int i = doint(segment.minY().Item1) - ymin;
-
-        //        float m1 = (segment.ps.X - segment.pe.X);
-        //       float m2 = (segment.ps.Y - segment.pe.Y);
-        //        float m = 0;
-        //        if (m2 == 0) continue;
-        //         m = m1 / m2;
-
-        //        if (kubelki[i] == null) kubelki[i] = new List<Kubel>();
-        //        kubelki[i].Add(new Kubel(doint(segment.maxY().Item1), doint(segment.minY().Item2), m));
-        //        licznik++;
-        //    }
-
-        //    while (licznik != 0 || aktualna.Count != 0)
-        //    {
-        //        if (kubelki[y - ymin] != null)
-        //        {
-        //            foreach (var kubel in kubelki[y - ymin])
-        //            {
-        //                aktualna.Add(kubel);
-        //                licznik--;
-        //            }
-        //        }
-
-        //        aktualna.Sort((a, b) => a.x.CompareTo(b.x));
-
-        //        for (int i = 0; i < aktualna.Count - 1; i += 2)
-        //        {
-        //            var przeciecie1 = aktualna[i];
-        //            var przeciecie2 = aktualna[i + 1];
-
-        //            for (int j = (int)przeciecie1.x; j <= (int)przeciecie2.x; j++)
-        //            {
-
-
-        //                float u = wroc(j);
-        //                float v = wroc(y);
-
-        //                if (j == -1) j = 0;
-                      
-        //                Vector3 gdzie = new Vector3(u, v, przestrzen.Zety[j, y]);
-
-
-        //                Vector3 aa = przestrzen.WektoryNormalne[j, y];
-                        
-        //                Vector3 wersor = obliczWersorSwiatla(przestrzen.swiatlo, gdzie);
-        //                Color obiektu = przestrzen.IO;
-        //                if (przestrzen.normalcolor != null)
-        //                    obiektu = przestrzen.ImageColors[j, y];
-
-                      
-        //                (int r, int g, int bb) = ObliczKolor(aa, wersor, new Vector3(0, 0, 1), przestrzen.kd, przestrzen.ks, przestrzen.m, obiektu, przestrzen.IL);
-        //                DrawPixel(r, g, bb, j, y);
-
-
-        //            }
-        //        }
-
-        //        aktualna.RemoveAll(element => element.ymax == y);
-        //        y++;
-
-        //        aktualna.ForEach(element => element.xulam += element.m);
-        //    }
-        //}
-
-
-
-        private void label2_Click(object sender, EventArgs e)
+        public void FillPolygon2(List<Segment> krawedzie)
         {
+            float ymin1 = float.MaxValue;
+            float ymax1 = float.MinValue;
 
+
+            foreach (var segment in krawedzie)
+            {
+                if (segment.ps.Y > ymax1) ymax1 = segment.ps.Y;
+                if (segment.pe.Y > ymax1) ymax1 = segment.pe.Y;
+                if (segment.ps.Y < ymin1) ymin1 = segment.ps.Y;
+                if (segment.pe.Y < ymin1) ymin1 = segment.pe.Y;
+            }
+
+            int ymin = doint(ymin1);
+            int ymax = doint(ymax1);
+
+            List<Kubel> aktualna = new List<Kubel>();
+            int y = ymin;
+            List<Kubel>[] kubelki = new List<Kubel>[ymax - ymin + 1];
+            int licznik = 0;
+
+            foreach (var segment in krawedzie)
+            {
+                int i = doint(segment.minY().Item1) - ymin;
+
+                float m1 = (segment.ps.X - segment.pe.X);
+                float m2 = (segment.ps.Y - segment.pe.Y);
+                float m = 0;
+                if (m2 == 0) continue;
+                m = m1 / m2;
+                int mm = (int)Math.Round(m);
+                if (kubelki[i] == null) kubelki[i] = new List<Kubel>();
+                kubelki[i].Add(new Kubel(doint(segment.maxY().Item1), doint(segment.minY().Item2), mm));
+                licznik++;
+            }
+
+            while (licznik != 0 || aktualna.Count != 0)
+            {
+                if (kubelki[y - ymin] != null)
+                {
+                    foreach (var kubel in kubelki[y - ymin])
+                    {
+                        aktualna.Add(kubel);
+                        licznik--;
+                    }
+                }
+
+                aktualna.Sort((a, b) => a.x.CompareTo(b.x));
+
+                for (int i = 0; i < aktualna.Count - 1; i += 2)
+                {
+                    var przeciecie1 = aktualna[i];
+                    var przeciecie2 = aktualna[i + 1];
+
+                    for (int j = (int)przeciecie1.x; j <= (int)przeciecie2.x; j++)
+                    {
+
+
+                        float u = wroc(j);
+                        float v = wroc(y);
+                        if (j == 233 && y == 120)
+                        {
+                            j = j;
+                        }
+                        if (j == -1) j = 0;
+
+                        Vector3 gdzie = new Vector3(u, v, przestrzen.Zety[j, y]);
+
+
+                        Vector3 aa = przestrzen.WektoryNormalne[j, y];
+
+                        Vector3 wersor = obliczWersorSwiatla(przestrzen.swiatlo, gdzie);
+                        Color obiektu = przestrzen.IO;
+                        if (przestrzen.normalcolor != null)
+                            obiektu = przestrzen.ImageColors[j, y];
+
+
+                        (int r, int g, int bb) = ObliczKolor(aa, wersor, new Vector3(0, 0, 1), przestrzen.kd, przestrzen.ks, przestrzen.m, obiektu, przestrzen.IL);
+                        DrawPixel(r, g, bb, j, y);
+
+
+                    }
+                }
+
+                aktualna.RemoveAll(element => element.ymax == y);
+                y++;
+
+                aktualna.ForEach(element => element.x += element.m);
+
+            }
         }
+
+
 
         private void trackBar2_Scroll(object sender, EventArgs e)
         {
@@ -506,7 +532,7 @@ namespace grafa20
                     for (int y = 0; y < resizedImage.Height; y++)
                     {
                         przestrzen.ImageColors[x, y] = resizedImage.GetPixel(x, y);
-                       
+
                     }
                 }
                 draw();
@@ -619,7 +645,8 @@ namespace grafa20
 
         private void trackBar6_Scroll(object sender, EventArgs e)
         {
-            przestrzen.swiatlo.Z = trackBar6.Value / 10.0f;
+            przestrzen.swiatlo.Z = trackBar6.Value / 5.0f;
+            label12.Text = $"z: {trackBar6.Value / 5.0f}";
             //   Vector3.Normalize(przestrzen.swiatlo);
             draw();
         }
@@ -686,6 +713,56 @@ namespace grafa20
             przestrzen.ks = trackBar4.Value / 10f;
 
             draw();
+        }
+
+        private void label10_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void trackBar8_Scroll(object sender, EventArgs e)
+        {
+            zlabel.Text = $"Z: {trackBar8.Value / 10.0f}";
+        }
+
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+            MouseEventArgs me = (MouseEventArgs)e;
+            Point coordinates = me.Location;
+
+            // Zak³adaj¹c, ¿e PictureBox ma rozmiar 500x500
+            float scaleX = 500;
+            float scaleY = 500;
+
+            for (int i = 0; i < 4; i++)
+            {
+                for (int j = 0; j < 4; j++)
+                {
+                    // Skalowanie punktów
+                    float scaledX = przestrzen.PunktyBaz[i, j].X * scaleX;
+                    float scaledY = przestrzen.PunktyBaz[i, j].Y * scaleY;
+
+                    // Sprawdzenie, czy klikniêcie jest blisko punktu
+                    if (Math.Abs(scaledX - coordinates.X) < 10 && Math.Abs(scaledY - coordinates.Y) < 10)
+                    {
+                        // Aktualizacja wartoœci z
+                        przestrzen.PunktyBaz[i, j].Z = trackBar8.Value / 10.0f;
+                    }
+                }
+            }
+            przestrzen.InicjujPunkty();
+            przestrzen.ObliczZiWektory();
+            draw();
+        }
+
+        private void label11_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label12_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

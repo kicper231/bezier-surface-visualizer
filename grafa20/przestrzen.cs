@@ -24,7 +24,7 @@ namespace grafa20
         public Bitmap wyswietl;
         public Bitmap normalmap;
        // public Bitmap normalmap;
-        public int podzial = 12;
+        public int podzial = 5;
         public Color IO = Color.Red;
         public Color IL = Color.White;
         public Color[,] ImageColors = new Color[500, 500];
@@ -48,7 +48,7 @@ namespace grafa20
                     float z = 0;
                     //if ((i == 1 || i == 2) && (j == 1 || j == 2))
                     //{
-                    //    z = 0.5f;
+                    //    z = 0.3f;
                     //}
 
                     PunktyBaz[i, j] = new Vector3(i / 3.0f, j / 3.0f, z);
@@ -56,7 +56,7 @@ namespace grafa20
             }
             InicjujPunkty();
         }
-        public Vector3 swiatlo = new Vector3(0.5f,0.5f,0.2f);
+        public Vector3 swiatlo = new Vector3(0.5f,0.5f,0.25f);
         //funkcja uzywana przy stacie programu i zmianie trangulacjji 
         public void InicjujPunkty()
         {
@@ -124,14 +124,13 @@ namespace grafa20
             //    g = g;
             //}
 
-
-            float ymax = trojkat.P1.Y;
-            float ymin = trojkat.P1.Y;
-
             Vector3 a = trojkat.P1;
             Vector3 b = trojkat.P2;
             Vector3 c = trojkat.P3;
+            float ymax = trojkat.P1.Y;
+            float ymin = trojkat.P1.Y;
 
+            
 
 
             List<Kubel> aktualna = new List<Kubel>();
@@ -265,7 +264,9 @@ namespace grafa20
                         if (j == -1) j = 0;
                         if (y == 0 && j == 200)
                             y = y;
-                            float z = Barycentric2D(u, v, a, b, c);
+                        if (y == 120 && j == 230)
+                            y = y;
+                        float z = Barycentric2D(u, v, a, b, c);
                         // PointR gdzie = new PointR(u, v, z);
                         Vector3 gdzie = new Vector3(u, v, z);
 
@@ -303,17 +304,129 @@ namespace grafa20
 
 
         }
-
+     
 
 
         public void ObliczZiWektory()
         {
-            Parallel.ForEach(trojkaty, obliczanie);
+            //Parallel.ForEach(trojkaty, obliczanie);
+
+            Parallel.ForEach(trojkaty, trojkat =>
+            {
+                List<Segment> lista = new List<Segment>
+    {
+                        new Segment(trojkat.P1, trojkat.P2),
+                        new Segment(trojkat.P2, trojkat.P3),
+                        new Segment(trojkat.P3, trojkat.P1)
+    };
+
+                obliczanie2(lista);
+            });
+
         }
 
 
 
+        public void obliczanie2(List<Segment> krawedzie)
+        {
 
+            Vector3 a = krawedzie[0].ps;
+            Vector3 b= krawedzie[1].ps;
+            Vector3 c= krawedzie[2].ps;
+            float ymin1 = float.MaxValue;
+            float ymax1 = float.MinValue;
+
+            int ax = (int)(a.X * 3 * podzial);
+            int ay = (int)(a.Y * 3 * podzial);
+            int bx = (int)(b.X * 3 * podzial);
+            int by = (int)(b.Y * 3 * podzial);
+            int cx = (int)(c.X * 3 * podzial);
+            int cy = (int)(c.Y * 3 * podzial);
+
+            foreach (var segment in krawedzie)
+            {
+                if (segment.ps.Y > ymax1) ymax1 = segment.ps.Y;
+                if (segment.pe.Y > ymax1) ymax1 = segment.pe.Y;
+                if (segment.ps.Y < ymin1) ymin1 = segment.ps.Y;
+                if (segment.pe.Y < ymin1) ymin1 = segment.pe.Y;
+            }
+
+            int ymin = doint(ymin1);
+            int ymax = doint(ymax1);
+
+            List<Kubel> aktualna = new List<Kubel>();
+            int y = ymin;
+            List<Kubel>[] kubelki = new List<Kubel>[ymax - ymin + 1];
+            int licznik = 0;
+
+            foreach (var segment in krawedzie)
+            {
+                int i = doint(segment.minY().Item1) - ymin;
+
+                float m1 = (segment.ps.X - segment.pe.X);
+                float m2 = (segment.ps.Y - segment.pe.Y);
+                float m = 0;
+                if (m2 == 0) continue;
+                m = m1 / m2;
+                int mm = (int)Math.Round(m);
+                if (kubelki[i] == null) kubelki[i] = new List<Kubel>();
+                kubelki[i].Add(new Kubel(doint(segment.maxY().Item1), doint(segment.minY().Item2), mm));
+                licznik++;
+            }
+
+            while (licznik != 0 || aktualna.Count != 0)
+            {
+                if (kubelki[y - ymin] != null)
+                {
+                    foreach (var kubel in kubelki[y - ymin])
+                    {
+                        aktualna.Add(kubel);
+                        licznik--;
+                    }
+                }
+
+                aktualna.Sort((a, b) => a.x.CompareTo(b.x));
+
+                for (int i = 0; i < aktualna.Count - 1; i += 2)
+                {
+                    var przeciecie1 = aktualna[i];
+                    var przeciecie2 = aktualna[i + 1];
+
+                    for (int j = (int)przeciecie1.x; j <= (int)przeciecie2.x; j++)
+                    {
+
+
+                        float u = wroc(j);
+                        float v = wroc(y);
+                        if (j == -1) j = 0;
+                        if (y == 120 && j == 230)
+                            y = y;
+                        float z = Barycentric2D(u, v, a, b, c);
+                        // PointR gdzie = new PointR(u, v, z);
+                        Vector3 gdzie = new Vector3(u, v, z);
+
+
+                        Vector3 aa = Barycentric3D(gdzie, a, b, c, WektoryTroj[(ax, ay)], WektoryTroj[(bx, by)], WektoryTroj[(cx, cy)]);
+                        if (normalmap != null)
+                        {
+                            aa = WektorPrzeksztalcony(aa, j, y);
+                        }
+
+                        WektoryNormalne[j, y] = aa;
+
+                        Zety[j, y] = z;
+
+
+                    }
+                }
+
+                aktualna.RemoveAll(element => element.ymax == y);
+                y++;
+
+                aktualna.ForEach(element => element.x += element.m);
+
+            }
+        }
 
         public Vector3 WektorPrzeksztalcony(Vector3 obliczony, int xx, int yy)
         {

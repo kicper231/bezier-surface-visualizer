@@ -35,6 +35,12 @@ namespace grafa20
             components = new System.ComponentModel.Container();
             pictureBox1 = new PictureBox();
             groupBox1 = new GroupBox();
+            label13 = new Label();
+            label12 = new Label();
+            label11 = new Label();
+            zlabel = new Label();
+            label10 = new Label();
+            trackBar8 = new TrackBar();
             checkBox5 = new CheckBox();
             checkBox4 = new CheckBox();
             label9 = new Label();
@@ -62,9 +68,9 @@ namespace grafa20
             trackBar1 = new TrackBar();
             colorDialog1 = new ColorDialog();
             timer1 = new System.Windows.Forms.Timer(components);
-            trackBar8 = new TrackBar();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)trackBar8).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trackBar7).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trackBar6).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trackBar5).BeginInit();
@@ -72,7 +78,6 @@ namespace grafa20
             ((System.ComponentModel.ISupportInitialize)trackBar3).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trackBar2).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trackBar1).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)trackBar8).BeginInit();
             SuspendLayout();
             // 
             // pictureBox1
@@ -84,11 +89,17 @@ namespace grafa20
             pictureBox1.Size = new Size(500, 500);
             pictureBox1.TabIndex = 0;
             pictureBox1.TabStop = false;
+            pictureBox1.Click += pictureBox1_Click;
             pictureBox1.Paint += pictureBox1_Paint;
             // 
             // groupBox1
             // 
             groupBox1.BackColor = SystemColors.ActiveCaption;
+            groupBox1.Controls.Add(label13);
+            groupBox1.Controls.Add(label12);
+            groupBox1.Controls.Add(label11);
+            groupBox1.Controls.Add(zlabel);
+            groupBox1.Controls.Add(label10);
             groupBox1.Controls.Add(trackBar8);
             groupBox1.Controls.Add(checkBox5);
             groupBox1.Controls.Add(checkBox4);
@@ -121,6 +132,69 @@ namespace grafa20
             groupBox1.TabIndex = 1;
             groupBox1.TabStop = false;
             groupBox1.Enter += groupBox1_Enter;
+            // 
+            // label13
+            // 
+            label13.AutoSize = true;
+            label13.BackColor = Color.Transparent;
+            label13.Font = new Font("Segoe UI", 6F, FontStyle.Regular, GraphicsUnit.Point);
+            label13.Location = new Point(30, 82);
+            label13.Name = "label13";
+            label13.Size = new Size(0, 12);
+            label13.TabIndex = 30;
+            // 
+            // label12
+            // 
+            label12.AutoSize = true;
+            label12.BackColor = Color.Transparent;
+            label12.Font = new Font("Segoe UI", 6F, FontStyle.Regular, GraphicsUnit.Point);
+            label12.Location = new Point(295, 82);
+            label12.Name = "label12";
+            label12.Size = new Size(12, 12);
+            label12.TabIndex = 29;
+            label12.Text = "z:";
+            label12.Click += label12_Click;
+            // 
+            // label11
+            // 
+            label11.AutoSize = true;
+            label11.BackColor = Color.Transparent;
+            label11.Font = new Font("Segoe UI", 6F, FontStyle.Regular, GraphicsUnit.Point);
+            label11.Location = new Point(79, 23);
+            label11.Name = "label11";
+            label11.Size = new Size(0, 12);
+            label11.TabIndex = 28;
+            label11.Click += label11_Click;
+            // 
+            // zlabel
+            // 
+            zlabel.AutoSize = true;
+            zlabel.BackColor = Color.Transparent;
+            zlabel.Font = new Font("Segoe UI", 6F, FontStyle.Regular, GraphicsUnit.Point);
+            zlabel.Location = new Point(295, 26);
+            zlabel.Name = "zlabel";
+            zlabel.Size = new Size(13, 12);
+            zlabel.TabIndex = 27;
+            zlabel.Text = "Z:";
+            // 
+            // label10
+            // 
+            label10.AutoSize = true;
+            label10.Location = new Point(252, 57);
+            label10.Name = "label10";
+            label10.Size = new Size(109, 20);
+            label10.TabIndex = 26;
+            label10.Text = "zmien z punktu";
+            label10.Click += label10_Click;
+            // 
+            // trackBar8
+            // 
+            trackBar8.Location = new Point(225, 32);
+            trackBar8.Maximum = 20;
+            trackBar8.Name = "trackBar8";
+            trackBar8.Size = new Size(153, 56);
+            trackBar8.TabIndex = 25;
+            trackBar8.Scroll += trackBar8_Scroll;
             // 
             // checkBox5
             // 
@@ -208,6 +282,7 @@ namespace grafa20
             trackBar6.Name = "trackBar6";
             trackBar6.Size = new Size(130, 56);
             trackBar6.TabIndex = 16;
+            trackBar6.Value = 5;
             trackBar6.Scroll += trackBar6_Scroll;
             // 
             // trackBar5
@@ -347,13 +422,12 @@ namespace grafa20
             label2.Size = new Size(50, 20);
             label2.TabIndex = 2;
             label2.Text = "label2";
-            label2.Click += label2_Click;
             // 
             // label1
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Segoe UI", 7F, FontStyle.Regular, GraphicsUnit.Point);
-            label1.Location = new Point(43, 57);
+            label1.Location = new Point(34, 57);
             label1.Name = "label1";
             label1.Size = new Size(130, 15);
             label1.TabIndex = 1;
@@ -376,13 +450,6 @@ namespace grafa20
             timer1.Interval = 50;
             timer1.Tick += timer1_Tick;
             // 
-            // trackBar8
-            // 
-            trackBar8.Location = new Point(241, 26);
-            trackBar8.Name = "trackBar8";
-            trackBar8.Size = new Size(130, 56);
-            trackBar8.TabIndex = 25;
-            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -391,10 +458,11 @@ namespace grafa20
             Controls.Add(groupBox1);
             Controls.Add(pictureBox1);
             Name = "Form1";
-            Text = "Form1";
+            Text = "GRAFIKA2";
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)trackBar8).EndInit();
             ((System.ComponentModel.ISupportInitialize)trackBar7).EndInit();
             ((System.ComponentModel.ISupportInitialize)trackBar6).EndInit();
             ((System.ComponentModel.ISupportInitialize)trackBar5).EndInit();
@@ -402,7 +470,6 @@ namespace grafa20
             ((System.ComponentModel.ISupportInitialize)trackBar3).EndInit();
             ((System.ComponentModel.ISupportInitialize)trackBar2).EndInit();
             ((System.ComponentModel.ISupportInitialize)trackBar1).EndInit();
-            ((System.ComponentModel.ISupportInitialize)trackBar8).EndInit();
             ResumeLayout(false);
         }
 
@@ -438,5 +505,10 @@ namespace grafa20
         private CheckBox checkBox5;
         private System.Windows.Forms.Timer timer1;
         private TrackBar trackBar8;
+        private Label label10;
+        private Label zlabel;
+        private Label label12;
+        private Label label11;
+        private Label label13;
     }
 }
