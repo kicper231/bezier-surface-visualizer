@@ -35,6 +35,12 @@ namespace grafa20
             components = new System.ComponentModel.Container();
             pictureBox1 = new PictureBox();
             groupBox1 = new GroupBox();
+            checkBox7 = new CheckBox();
+            label15 = new Label();
+            label14 = new Label();
+            trackBar10 = new TrackBar();
+            trackBar9 = new TrackBar();
+            checkBox6 = new CheckBox();
             label13 = new Label();
             label12 = new Label();
             label11 = new Label();
@@ -70,6 +76,8 @@ namespace grafa20
             timer1 = new System.Windows.Forms.Timer(components);
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)trackBar10).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)trackBar9).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trackBar8).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trackBar7).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trackBar6).BeginInit();
@@ -95,6 +103,12 @@ namespace grafa20
             // groupBox1
             // 
             groupBox1.BackColor = SystemColors.ActiveCaption;
+            groupBox1.Controls.Add(checkBox7);
+            groupBox1.Controls.Add(label15);
+            groupBox1.Controls.Add(label14);
+            groupBox1.Controls.Add(trackBar10);
+            groupBox1.Controls.Add(trackBar9);
+            groupBox1.Controls.Add(checkBox6);
             groupBox1.Controls.Add(label13);
             groupBox1.Controls.Add(label12);
             groupBox1.Controls.Add(label11);
@@ -132,6 +146,62 @@ namespace grafa20
             groupBox1.TabIndex = 1;
             groupBox1.TabStop = false;
             groupBox1.Enter += groupBox1_Enter;
+            // 
+            // checkBox7
+            // 
+            checkBox7.AutoSize = true;
+            checkBox7.Location = new Point(207, 407);
+            checkBox7.Name = "checkBox7";
+            checkBox7.Size = new Size(163, 24);
+            checkBox7.TabIndex = 36;
+            checkBox7.Text = "włacz transformacje";
+            checkBox7.UseVisualStyleBackColor = true;
+            checkBox7.CheckedChanged += checkBox7_CheckedChanged;
+            // 
+            // label15
+            // 
+            label15.AutoSize = true;
+            label15.Location = new Point(293, 472);
+            label15.Name = "label15";
+            label15.Size = new Size(58, 20);
+            label15.TabIndex = 35;
+            label15.Text = "label15";
+            // 
+            // label14
+            // 
+            label14.AutoSize = true;
+            label14.Location = new Point(135, 469);
+            label14.Name = "label14";
+            label14.Size = new Size(34, 20);
+            label14.TabIndex = 34;
+            label14.Text = "alfa";
+            // 
+            // trackBar10
+            // 
+            trackBar10.Location = new Point(109, 438);
+            trackBar10.Name = "trackBar10";
+            trackBar10.Size = new Size(130, 56);
+            trackBar10.TabIndex = 33;
+            trackBar10.Scroll += trackBar10_Scroll;
+            // 
+            // trackBar9
+            // 
+            trackBar9.Location = new Point(248, 438);
+            trackBar9.Name = "trackBar9";
+            trackBar9.Size = new Size(130, 56);
+            trackBar9.TabIndex = 32;
+            trackBar9.Scroll += trackBar9_Scroll;
+            // 
+            // checkBox6
+            // 
+            checkBox6.AutoSize = true;
+            checkBox6.Location = new Point(13, 407);
+            checkBox6.Name = "checkBox6";
+            checkBox6.Size = new Size(101, 24);
+            checkBox6.TabIndex = 31;
+            checkBox6.Text = "Kula wlacz";
+            checkBox6.UseVisualStyleBackColor = true;
+            checkBox6.CheckedChanged += checkBox6_CheckedChanged;
             // 
             // label13
             // 
@@ -462,6 +532,8 @@ namespace grafa20
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)trackBar10).EndInit();
+            ((System.ComponentModel.ISupportInitialize)trackBar9).EndInit();
             ((System.ComponentModel.ISupportInitialize)trackBar8).EndInit();
             ((System.ComponentModel.ISupportInitialize)trackBar7).EndInit();
             ((System.ComponentModel.ISupportInitialize)trackBar6).EndInit();
@@ -510,5 +582,11 @@ namespace grafa20
         private Label label12;
         private Label label11;
         private Label label13;
+        private CheckBox checkBox6;
+        private TrackBar trackBar10;
+        private TrackBar trackBar9;
+        private CheckBox checkBox7;
+        private Label label15;
+        private Label label14;
     }
 }

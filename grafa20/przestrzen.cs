@@ -6,13 +6,14 @@ using System.Text;
 using System.Threading.Tasks;
 using static grafa20.Geometry;
 using System.Runtime.InteropServices;
-
+using System.Security.Policy;
 
 namespace grafa20
 {
     public class Przestrzen
     {
         public Vector3[,] PunktyBaz { get; set; }
+        public bool sfera = false;
         public Dictionary<(int, int), Vector3> PunktyTroj { get; set; }
         public Dictionary<(int, int), Vector3> WektoryTroj { get; set; }
         public Bitmap normalcolor;
@@ -33,10 +34,26 @@ namespace grafa20
         public float ks = 0.5f;
         public float m;
 
+        //sfera
+        float srodekx = 1.0f / 2.0f;
+        float srodey = 1.0f / 2.0f;
+        float R = 1.0f / 2.0f;
+        Vector3 sferasrodek;
+
+        public float height = 500;
+        public float width = 500;
+
+        public float alfa = 0.1f;
+        public float beta = 0.1f;
+        public bool transform = false;
+        public Matrix4x4 M;
         public Przestrzen()
         {
+            sferasrodek = new Vector3(1.0f / 2.0f, 1.0f / 2.0f, 0);
             PunktyTroj = new Dictionary<(int, int), Vector3>();
             WektoryTroj= new Dictionary<(int, int), Vector3>();
+
+            M = Matrix4x4.CreateTranslation(-height / 2, -width / 2, 0) * Matrix4x4.CreateFromYawPitchRoll(0, alfa, beta) * Matrix4x4.CreateTranslation(height / 2, width / 2, 0);
 
             PunktyBaz = new Vector3[4, 4];
             for (int i = 0; i < 4; i++)
@@ -67,8 +84,20 @@ namespace grafa20
             {
                 for (int j = 0; j <= 3 * podzial; j++)
                 {
+                    if(sfera==false)
+                    { 
                     PunktyTroj[(i, j)] = new Vector3(i / (3.0f * podzial), j / (3.0f * podzial), OblicZ(i / (3.0f * podzial), j / (3.0f * podzial)));
                     WektoryTroj[(i, j)] = ObliczWektorNormalny(PunktyBaz, 3, 3, i / (3.0f * podzial), j / (3.0f * podzial));
+                    }
+                    else
+                    {
+                        if(i==0&&j==0)
+                        {
+                            i = i;
+                        }
+                        PunktyTroj[(i, j)] = new Vector3(i / (3.0f * podzial), j / (3.0f * podzial), OblicZsfera(i / (3.0f * podzial), j / (3.0f * podzial)));
+                       WektoryTroj[(i, j)] = ObliczWektorsfera(PunktyTroj[( i,j)]);
+                    }
                 }
             }
 
@@ -96,6 +125,11 @@ namespace grafa20
             }
         }
 
+
+        public Vector3 ObliczWektorsfera(Vector3 wektortrojkata)
+        {
+            return Vector3.Normalize((wektortrojkata - sferasrodek));
+        }
         public float OblicZ(float x, float y)
         {
             float z = 0;
@@ -110,201 +144,27 @@ namespace grafa20
             return z;
         }
 
-       
 
 
 
 
-        public void obliczanie(Trojkat trojkat)
+        public float OblicZsfera(float x, float y)
         {
+            float z = 0;
+            float x1 = x - 1.0f / 2.0f;
+            float y1 = y - 1.0f / 2.0f;
 
-
-            //if (g == 13)
-            //{
-            //    g = g;
-            //}
-
-            Vector3 a = trojkat.P1;
-            Vector3 b = trojkat.P2;
-            Vector3 c = trojkat.P3;
-            float ymax = trojkat.P1.Y;
-            float ymin = trojkat.P1.Y;
-
-            
-
-
-            List<Kubel> aktualna = new List<Kubel>();
-
-            if (trojkat.P2.Y > ymax)
-                ymax = trojkat.P2.Y;
-            if (trojkat.P3.Y > ymax)
-                ymax = trojkat.P3.Y;
-
-            if (trojkat.P2.Y < ymin)
-                ymin = trojkat.P2.Y;
-            if (trojkat.P3.Y < ymin)
-                ymin = trojkat.P3.Y;
-
-
-
-            int y = doint(ymin);
-            int ymaxi = doint(ymax);
-            int ymini = doint(ymin);
-            // robimy to tylko dla trójkatów więc kubelek będzie jeden
-            // celowe uproszeczenie algorytmu dla poprawy zlożoności 
-
-            // List<Kubel>[] kubelki = new List<Kubel>[ymaxi - ymini + 1];
-            List<Kubel> kubel = new List<Kubel>();
-            int licznik = 0;
-
-
-            void ObsluzSegment(Vector3 pStart, Vector3 pEnd)
+            float srodekpierwiastka = R * R - y1 * y1 - x1 * x1;
+            if (srodekpierwiastka > 0)
             {
-                float m1 = (pStart.X - pEnd.X);
-                float m2 = (pStart.Y - pEnd.Y);
-                if (m2 == 0) return; // Uniknięcie dzielenia przez zero // pionowa nie dodajemy 
-
-                float m22 = m1 / m2;
-                int m = (int)Math.Round(m22);
-                (int, int) sybko(Vector3 pStart, Vector3 pEnd)
-                {
-                    if (pStart.Y < pEnd.Y)
-                        return (doint(pStart.Y), doint(pStart.X));
-                    else
-                        return (doint(pEnd.Y), doint(pEnd.X));
-                }
-                int minY = 0;
-                int endX = 0;
-                (minY, endX) = sybko(pStart, pEnd);
-
-                int maxY = doint(Math.Max(pStart.Y, pEnd.Y));
-                int i = minY - ymini;
-                // jakby wiele to stwórz nowa liste
-                //     if (kubelki[i] == null) kubelki[i] = new List<Kubel>();
-
-
-                //kubelki[i].Add(new Kubel(maxY, endx, m));
-                kubel.Add(new Kubel(maxY, endX, m));
-                licznik++;
+                z = (float)Math.Sqrt(srodekpierwiastka);
+                
             }
 
-            ObsluzSegment(trojkat.P1, trojkat.P2);
-            ObsluzSegment(trojkat.P2, trojkat.P3);
-            ObsluzSegment(trojkat.P3, trojkat.P1);
-
-            int ax, ay, bx, by, cx, cy;
-            {
-               
-                    ax = (int)(a.X*3*podzial);
-              
-
-                
-                    ay = (int)(a.Y * 3 * podzial);
-                
-
-               
-                    bx = (int)(b.X * 3 * podzial);
-                
-
-               
-                    by = (int)(b.Y * 3 * podzial);
-                
-
-                
-                    cx = (int)(c.X * 3 * podzial);
-                
-                 
-
-             
-                    cy = (int)(c.Y * 3 * podzial);
-               
-            }
-
-
-
-            while (licznik != 0 || aktualna.Count != 0)
-            {
-
-
-                //if (y - ymin >= kubelki.Length) return;
-                //if (kubelki[y - ymin] != null)
-                //{
-                //    foreach (var kubel in kubelki[y - ymin])
-                //    {
-                //        aktualna.Add(kubel);
-                //        licznik--;
-                //    }
-
-                //}
-                if (y == doint(ymin))
-                {
-                    aktualna.Add(kubel[0]);
-                    aktualna.Add(kubel[1]);
-                    aktualna.Sort((a, b) => a.x.CompareTo(b.x));
-                    licznik = licznik - 2;
-                }
-
-                //aktualna.Sort((a, b) => a.x.CompareTo(b.x));
-                // rysowanie pixeli
-                for (int i = 0; i < aktualna.Count - 1; i += 2)
-                {
-
-                    var przeciecie1 = aktualna[i];
-                    var przeciecie2 = aktualna[i + 1];
-
-
-
-
-
-                    for (int j = (int)przeciecie1.x; j <= (int)przeciecie2.x; j++)
-                    {
-
-                        float u = wroc(j);
-                        float v = wroc(y);
-                        if (j == -1) j = 0;
-                        if (y == 0 && j == 200)
-                            y = y;
-                        if (y == 120 && j == 230)
-                            y = y;
-                        float z = Barycentric2D(u, v, a, b, c);
-                        // PointR gdzie = new PointR(u, v, z);
-                        Vector3 gdzie = new Vector3(u, v, z);
-
-
-                        Vector3 aa = Barycentric3D(gdzie, a,b,c,WektoryTroj[(ax, ay)], WektoryTroj[(bx, by)], WektoryTroj[(cx, cy)]);
-                        if (normalmap != null)
-                        {
-                            aa = WektorPrzeksztalcony(aa, j,y);
-                        }
-
-                        WektoryNormalne[j, y] = aa;
-                        
-                        Zety[j, y] = z;
-                       
-                        
-                      
-                        
-                    }
-
-                }
-
-
-                aktualna.RemoveAll(element => element.ymax == y);
-                y++;
-
-
-                aktualna.ForEach(element => element.x += element.m);
-
-
-            }
-
-
-            //if (a == a)
-            //{ a = a; }
-
-
+            return z;
         }
-     
+
+
 
 
         public void ObliczZiWektory()
@@ -368,9 +228,9 @@ namespace grafa20
                 float m = 0;
                 if (m2 == 0) continue;
                 m = m1 / m2;
-                int mm = (int)Math.Round(m);
+                //int mm = (int)Math.Round(m);
                 if (kubelki[i] == null) kubelki[i] = new List<Kubel>();
-                kubelki[i].Add(new Kubel(doint(segment.maxY().Item1), doint(segment.minY().Item2), mm));
+                kubelki[i].Add(new Kubel(doint(segment.maxY().Item1), doint(segment.minY().Item2), m));
                 licznik++;
             }
 
@@ -392,15 +252,18 @@ namespace grafa20
                     var przeciecie1 = aktualna[i];
                     var przeciecie2 = aktualna[i + 1];
 
-                    for (int j = (int)przeciecie1.x; j <= (int)przeciecie2.x; j++)
+                  
+
+                   
+
+                        for (int j = (int)przeciecie1.x; j <= (int)przeciecie2.x; j++)
                     {
 
 
                         float u = wroc(j);
                         float v = wroc(y);
                         if (j == -1) j = 0;
-                        if (y == 120 && j == 230)
-                            y = y;
+                      
                         float z = Barycentric2D(u, v, a, b, c);
                         // PointR gdzie = new PointR(u, v, z);
                         Vector3 gdzie = new Vector3(u, v, z);
@@ -415,7 +278,7 @@ namespace grafa20
                         WektoryNormalne[j, y] = aa;
 
                         Zety[j, y] = z;
-
+                        
 
                     }
                 }
