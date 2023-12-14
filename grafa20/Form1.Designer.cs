@@ -163,9 +163,9 @@ namespace grafa20
             label15.AutoSize = true;
             label15.Location = new Point(293, 472);
             label15.Name = "label15";
-            label15.Size = new Size(58, 20);
+            label15.Size = new Size(39, 20);
             label15.TabIndex = 35;
-            label15.Text = "label15";
+            label15.Text = "beta";
             // 
             // label14
             // 

@@ -262,7 +262,7 @@ namespace grafa20
                         Vector3 p = new Vector3(j, y, 0);
                         if (przestrzen.transform == true)
                         {
-                            p = new Vector3(j, y, przestrzen.Zety[j, y] * 100);
+                            p = new Vector3(j, y, przestrzen.Zety[j, y] * 400);
                             p = Vector3.Transform(p, przestrzen.M);
                         }
                         if (p.X >= 0 && p.Y >= 0 && p.X <= 499 && p.Y <= 499)
@@ -377,7 +377,7 @@ namespace grafa20
                     for (int y = 0; y < resizedImage.Height; y++)
                     {
                         przestrzen.BitmapVector[x, y] = przestrzen.ColorToNormalVector(resizedImage.GetPixel(x, y));
-                        // Tutaj mo¿esz u¿yæ koloru imageColors[x, y] w funkcji ObliczKolor
+                    
                     }
                 }
                 przestrzen.ObliczZiWektory();
@@ -496,7 +496,7 @@ namespace grafa20
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            t += 0.08f; // Zwiêkszanie parametru czasu
+            t += 0.08f; 
 
             przestrzen.swiatlo.X = (cx + a * (float)Math.Cos(t)) / 499.0f;
             przestrzen.swiatlo.Y = (cy + b * (float)Math.Sin(t)) / 499.0f;
@@ -545,7 +545,7 @@ namespace grafa20
             MouseEventArgs me = (MouseEventArgs)e;
             Point coordinates = me.Location;
 
-            // Zak³adaj¹c, ¿e PictureBox ma rozmiar 500x500
+         
             float scaleX = 500;
             float scaleY = 500;
 
@@ -553,14 +553,14 @@ namespace grafa20
             {
                 for (int j = 0; j < 4; j++)
                 {
-                    // Skalowanie punktów
+                  
                     float scaledX = przestrzen.PunktyBaz[i, j].X * scaleX;
                     float scaledY = przestrzen.PunktyBaz[i, j].Y * scaleY;
 
-                    // Sprawdzenie, czy klikniêcie jest blisko punktu
+                  
                     if (Math.Abs(scaledX - coordinates.X) < 10 && Math.Abs(scaledY - coordinates.Y) < 10)
                     {
-                        // Aktualizacja wartoœci z
+                      
                         przestrzen.PunktyBaz[i, j].Z = trackBar8.Value / 10.0f;
                     }
                 }
@@ -619,6 +619,13 @@ namespace grafa20
         {
             if (checkBox6.Checked == true)
             {
+                for (int i = 0; i < 500; i++)
+                {
+                    for (int j = 0; j < 500; j++)
+                    {
+                        DrawPixel(0, 0, 0, i, j);
+                    }
+                }
                 przestrzen.swiatlo.Z = 1.0f;
                 przestrzen.sfera = true;
                 przestrzen.InicjujPunkty();
@@ -627,6 +634,13 @@ namespace grafa20
             }
             else
             {
+                for (int i = 0; i < 500; i++)
+                {
+                    for (int j = 0; j < 500; j++)
+                    {
+                        DrawPixel(0, 0, 0, i, j);
+                    }
+                }
                 przestrzen.sfera = false;
                 przestrzen.InicjujPunkty();
                 przestrzen.ObliczZiWektory();
@@ -648,12 +662,12 @@ namespace grafa20
 
         private void trackBar10_Scroll(object sender, EventArgs e)
         {
-            przestrzen.alfa = trackBar10.Value / 10.0f;
+            przestrzen.alfa = trackBar10.Value / 5.0f;
             for (int i = 0; i < 500; i++)
             {
                 for (int j = 0; j < 500; j++)
                 {
-                    DrawPixel(1, 1, 1, i, j);
+                    DrawPixel(0, 0, 0, i, j);
                 }
             }
             przestrzen.M = Matrix4x4.CreateTranslation(-przestrzen.height / 2, -przestrzen.width / 2, 0) * Matrix4x4.CreateFromYawPitchRoll(0, przestrzen.alfa, przestrzen.beta) * Matrix4x4.CreateTranslation(przestrzen.height / 2, przestrzen.width / 2, 0);
@@ -662,13 +676,13 @@ namespace grafa20
 
         private void trackBar9_Scroll(object sender, EventArgs e)
         {
-            przestrzen.beta = trackBar9.Value / 10.0f;
+            przestrzen.beta = trackBar9.Value / 5.0f;
 
             for (int i = 0; i < 500; i++)
             {
                 for (int j = 0; j < 500; j++)
                 {
-                    DrawPixel(1, 1, 1, i, j);
+                    DrawPixel(0, 0, 0, i, j);
                 }
             }
             przestrzen.M = Matrix4x4.CreateTranslation(-przestrzen.height / 2, -przestrzen.width / 2, 0) * Matrix4x4.CreateFromYawPitchRoll(0, przestrzen.alfa, przestrzen.beta) * Matrix4x4.CreateTranslation(przestrzen.height / 2, przestrzen.width / 2, 0);

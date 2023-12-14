@@ -177,12 +177,12 @@ namespace grafa20
             float IL_R = IL.R / 255f;
             float IL_G = IL.G / 255f;
             float IL_B = IL.B / 255f;
-            // Składowa rozproszona
+          
             float cosTheta = Math.Max(0, Vector3.Dot(N, L));
             float diffuseR = kd * IL_R * IO_R * cosTheta;
             float diffuseG = kd * IL_G * IO_G * cosTheta;
             float diffuseB = kd * IL_B * IO_B * cosTheta;
-            // Składowa zwierciadlana
+       
             Vector3 R = 2 * Vector3.Dot(N, L) * N - L;
             Vector3.Normalize(R);
             float cosAlpha = Math.Max(0, Vector3.Dot(V, R));
@@ -196,7 +196,7 @@ namespace grafa20
             float specularG = ks * IL_G * IO_G * cosAlpham;
             float specularB = ks * IL_B * IO_B * cosAlpham;
 
-            // Sumowanie składowych i konwersja do zakresu 0-255
+            
             int r = (int)Math.Min(255, (diffuseR +specularR ) * 255);
             int g = (int)Math.Min(255, (diffuseG +specularG  ) * 255);
             int b = (int)Math.Min(255, (diffuseB+ specularB) * 255);
