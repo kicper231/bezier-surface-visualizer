@@ -73,13 +73,13 @@ namespace grafa20
                     {
                         for (int y = 0; y < 4; y++)
                         {
-                            if (x < 4 - 1) // Linia w poziomie
+                            if (x < 4 - 1) // w pionie
                                 g.DrawLine(Pens.Black, doint(przestrzen.PunktyBaz[x, y].X), doint(przestrzen.PunktyBaz[x, y].Y), doint(przestrzen.PunktyBaz[x + 1, y].X), doint(przestrzen.PunktyBaz[x + 1, y].Y));
 
-                            if (y < 4 - 1) // Linia w pionie
+                            if (y < 4 - 1)  // poziomie
                                 g.DrawLine(Pens.Black, doint(przestrzen.PunktyBaz[x, y].X), doint(przestrzen.PunktyBaz[x, y].Y), doint(przestrzen.PunktyBaz[x, y + 1].X), doint(przestrzen.PunktyBaz[x, y + 1].Y));
 
-                            // Rysowanie kó³ka
+                            //kulka siatki
                             g.DrawEllipse(Pens.Red, doint(przestrzen.PunktyBaz[x, y].X) - 5, doint(przestrzen.PunktyBaz[x, y].Y) - 5, 10, 10);
                         }
                     }
@@ -105,7 +105,7 @@ namespace grafa20
         {
             przestrzen.podzial = trackBar1.Value;
             przestrzen.InicjujPunkty();
-            //funkcja rysuj¹ca 
+            
             przestrzen.ObliczZiWektory();
             draw();
             pictureBox1.Invalidate();
@@ -367,7 +367,7 @@ namespace grafa20
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
                 string filePath = openFileDialog.FileName;
-                // Teraz mo¿esz wczytaæ plik graficzny
+               
                 Bitmap originalImage = new Bitmap(filePath);
                 Bitmap resizedImage = new Bitmap(originalImage, new Size(500, 500));
                 przestrzen.normalmap = resizedImage;
@@ -545,7 +545,7 @@ namespace grafa20
             MouseEventArgs me = (MouseEventArgs)e;
             Point coordinates = me.Location;
 
-         
+         // rozmiar 500x500
             float scaleX = 500;
             float scaleY = 500;
 
@@ -560,7 +560,7 @@ namespace grafa20
                   
                     if (Math.Abs(scaledX - coordinates.X) < 10 && Math.Abs(scaledY - coordinates.Y) < 10)
                     {
-                      
+                      //klikniecie zmiana z punktu 
                         przestrzen.PunktyBaz[i, j].Z = trackBar8.Value / 10.0f;
                     }
                 }
