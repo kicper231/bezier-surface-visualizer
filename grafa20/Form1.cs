@@ -55,15 +55,27 @@ namespace grafa20
 
             using (var g = Graphics.FromImage(space.vieew))
             {
-                
+
                 if (trianglevave == 1)
                 {
                     foreach (var triangle in space.triangles)
                     {
+                      
+                        Vector3 transformedP1 = new Vector3(doint(triangle.P1.X), doint(triangle.P1.Y), space.Zety[doint(triangle.P1.X), doint(triangle.P1.Y)] );
+                        Vector3 transformedP2 = new Vector3(doint(triangle.P2.X), doint(triangle.P2.Y), space.Zety[doint(triangle.P2.X), doint(triangle.P1.Y)] );
+                        Vector3 transformedP3 = new Vector3(doint(triangle.P3.X), doint(triangle.P3.Y), space.Zety[doint(triangle.P3.X), doint(triangle.P3.Y)] );
 
-                        DrawLine(g, triangle.P1, triangle.P2);
-                        DrawLine(g, triangle.P2, triangle.P3);
-                        DrawLine(g, triangle.P3, triangle.P1);
+                        if (space.transform == true)
+                        {
+                            transformedP1 = Vector3.Transform(transformedP1, space.M);
+                            transformedP2 = Vector3.Transform(transformedP2, space.M);
+                            transformedP3 = Vector3.Transform(transformedP3, space.M);
+                        }
+
+                       
+                        DrawTransformedLine(g, transformedP1, transformedP2);
+                        DrawTransformedLine(g, transformedP2, transformedP3);
+                        DrawTransformedLine(g, transformedP3, transformedP1);
                     }
                 }
 
@@ -73,14 +85,44 @@ namespace grafa20
                     {
                         for (int y = 0; y < 4; y++)
                         {
-                            if (x < 4 - 1) // w pionie
-                                g.DrawLine(Pens.Black, doint(space.BasePoints[x, y].X), doint(space.BasePoints[x, y].Y), doint(space.BasePoints[x + 1, y].X), doint(space.BasePoints[x + 1, y].Y));
+                            // Zastosuj transformacjê do punktów bazowych
+                            Vector3 transformedBasePoint = new Vector3(doint(space.BasePoints[x, y].X), doint(space.BasePoints[x, y].Y), 0);
 
-                            if (y < 4 - 1)  // poziomie
-                                g.DrawLine(Pens.Black, doint(space.BasePoints[x, y].X), doint(space.BasePoints[x, y].Y), doint(space.BasePoints[x, y + 1].X), doint(space.BasePoints[x, y + 1].Y));
+                            if (space.transform == true)
+                            {
+                                transformedBasePoint = Vector3.Transform(transformedBasePoint, space.M);
+                            }
 
-                            //kulka siatki
-                            g.DrawEllipse(Pens.Red, doint(space.BasePoints[x, y].X) - 5, doint(space.BasePoints[x, y].Y) - 5, 10, 10);
+                            // Rysuj linie w pionie i poziomie
+                            if (x < 4 - 1)
+                            {
+                                Vector3 transformedNextPoint = new Vector3(doint(space.BasePoints[x + 1, y].X), doint(space.BasePoints[x + 1, y].Y), 0);
+                                if (space.transform == true)
+                                {
+                                    transformedNextPoint = Vector3.Transform(transformedNextPoint, space.M);
+                                }
+                                g.DrawLine(Pens.Black, transformedBasePoint.X, transformedBasePoint.Y, transformedNextPoint.X, transformedNextPoint.Y);
+                            }
+
+                            if (y < 4 - 1)
+                            {
+                                 Vector3 transformedNextPoint = new Vector3(doint(space.BasePoints[x, y + 1].X), doint(space.BasePoints[x, y + 1].Y), 0);
+                                if (space.transform == true)
+                                {
+                                    transformedNextPoint = Vector3.Transform(transformedNextPoint, space.M);
+                                }
+                                g.DrawLine(Pens.Black, transformedBasePoint.X, transformedBasePoint.Y, transformedNextPoint.X, transformedNextPoint.Y);
+                            }
+
+                           
+                            Vector3 transformedGridPoint = new Vector3(doint(space.BasePoints[x, y].X), doint(space.BasePoints[x, y].Y), 0);
+                            if (space.transform == true)
+                            {
+                                transformedGridPoint = Vector3.Transform(transformedGridPoint, space.M);
+                            }
+
+                            // Przesuñ i narysuj kulki siatki
+                            g.DrawEllipse(Pens.Red, transformedGridPoint.X - 5, transformedGridPoint.Y - 5, 10, 10);
                         }
                     }
                 }
@@ -99,6 +141,12 @@ namespace grafa20
 
 
             g.DrawLine(Pens.Black, point1, point2);
+        }
+
+        void DrawTransformedLine(Graphics g, Vector3 start, Vector3 end)
+        {
+           
+            g.DrawLine(Pens.Black, start.X, start.Y, end.X, end.Y);
         }
 
         private void trackBar1_Scroll(object sender, EventArgs e)
