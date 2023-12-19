@@ -11,11 +11,11 @@ namespace grafa20
 {
     public partial class Form1 : Form
     {
-        public Przestrzen przestrzen;
+        public Space space;
         Stopwatch stopwatch = new Stopwatch();
-        int siatkatroj = 0;
-        int siatka = 0;
-
+        int trianglevave = 0;
+        int nets = 0;
+    
         private float t = 0.0f;
         private float cx = 250;
         private float cy = 250;
@@ -24,13 +24,13 @@ namespace grafa20
         public Form1()
         {
             InitializeComponent();
-            przestrzen = new Przestrzen();
+            space = new Space();
             int width = 500;
             int height = 500;
-            przestrzen.pixels = new Byte[width * height * 3];
-            przestrzen.BitsHanle = GCHandle.Alloc(przestrzen.pixels, GCHandleType.Pinned);
-            przestrzen.wyswietl = new Bitmap(width, height, width * 3, PixelFormat.Format24bppRgb, przestrzen.BitsHanle.AddrOfPinnedObject());
-            przestrzen.ObliczZiWektory();
+            space.pixels = new Byte[width * height * 3];
+            space.BitsHanle = GCHandle.Alloc(space.pixels, GCHandleType.Pinned);
+            space.vieew = new Bitmap(width, height, width * 3, PixelFormat.Format24bppRgb, space.BitsHanle.AddrOfPinnedObject());
+            space.ObliczZiWektory();
             draw();
 
         }
@@ -41,9 +41,9 @@ namespace grafa20
 
 
             int currentLine = 3 * (y * 500 + x);
-            przestrzen.pixels[currentLine] = (byte)b;
-            przestrzen.pixels[currentLine + 1] = (byte)g;
-            przestrzen.pixels[currentLine + 2] = (byte)r;
+            space.pixels[currentLine] = (byte)b;
+            space.pixels[currentLine + 1] = (byte)g;
+            space.pixels[currentLine + 2] = (byte)r;
 
 
 
@@ -53,45 +53,45 @@ namespace grafa20
         {
 
 
-            using (var g = Graphics.FromImage(przestrzen.wyswietl))
+            using (var g = Graphics.FromImage(space.vieew))
             {
-                // g.DrawRectangle(Pens.White, new Rectangle(50, 50, 100, 100));
-                if (siatkatroj == 1)
+                
+                if (trianglevave == 1)
                 {
-                    foreach (var trojkat in przestrzen.trojkaty)
+                    foreach (var triangle in space.triangles)
                     {
 
-                        RysujLinie(g, trojkat.P1, trojkat.P2);
-                        RysujLinie(g, trojkat.P2, trojkat.P3);
-                        RysujLinie(g, trojkat.P3, trojkat.P1);
+                        DrawLine(g, triangle.P1, triangle.P2);
+                        DrawLine(g, triangle.P2, triangle.P3);
+                        DrawLine(g, triangle.P3, triangle.P1);
                     }
                 }
 
-                if (siatka == 1)
+                if (nets == 1)
                 {
                     for (int x = 0; x < 4; x++)
                     {
                         for (int y = 0; y < 4; y++)
                         {
                             if (x < 4 - 1) // w pionie
-                                g.DrawLine(Pens.Black, doint(przestrzen.PunktyBaz[x, y].X), doint(przestrzen.PunktyBaz[x, y].Y), doint(przestrzen.PunktyBaz[x + 1, y].X), doint(przestrzen.PunktyBaz[x + 1, y].Y));
+                                g.DrawLine(Pens.Black, doint(space.BasePoints[x, y].X), doint(space.BasePoints[x, y].Y), doint(space.BasePoints[x + 1, y].X), doint(space.BasePoints[x + 1, y].Y));
 
                             if (y < 4 - 1)  // poziomie
-                                g.DrawLine(Pens.Black, doint(przestrzen.PunktyBaz[x, y].X), doint(przestrzen.PunktyBaz[x, y].Y), doint(przestrzen.PunktyBaz[x, y + 1].X), doint(przestrzen.PunktyBaz[x, y + 1].Y));
+                                g.DrawLine(Pens.Black, doint(space.BasePoints[x, y].X), doint(space.BasePoints[x, y].Y), doint(space.BasePoints[x, y + 1].X), doint(space.BasePoints[x, y + 1].Y));
 
                             //kulka siatki
-                            g.DrawEllipse(Pens.Red, doint(przestrzen.PunktyBaz[x, y].X) - 5, doint(przestrzen.PunktyBaz[x, y].Y) - 5, 10, 10);
+                            g.DrawEllipse(Pens.Red, doint(space.BasePoints[x, y].X) - 5, doint(space.BasePoints[x, y].Y) - 5, 10, 10);
                         }
                     }
                 }
             }
 
 
-            e.Graphics.DrawImage(przestrzen.wyswietl, 0, 0);
+            e.Graphics.DrawImage(space.vieew, 0, 0);
 
         }
 
-        private void RysujLinie(Graphics g, Vector3 p1, Vector3 p2)
+        private void DrawLine(Graphics g, Vector3 p1, Vector3 p2)
         {
 
             PointF point1 = new PointF(doint(p1.X), doint(p1.Y));
@@ -103,10 +103,10 @@ namespace grafa20
 
         private void trackBar1_Scroll(object sender, EventArgs e)
         {
-            przestrzen.podzial = trackBar1.Value;
-            przestrzen.InicjujPunkty();
+            space.numofdivision = trackBar1.Value;
+            space.InitPoints();
             
-            przestrzen.ObliczZiWektory();
+            space.ObliczZiWektory();
             draw();
             pictureBox1.Invalidate();
 
@@ -116,58 +116,23 @@ namespace grafa20
 
         public void draw()
         {
-            //for (int z = 0; z < 500; z++)
-            //{
-            //    for (int j = 0; j < 500; j++)
-            //    {
-            //        DrawPixel(0, 0, 0, z, j);
-            //    }
-            //}
-
+           
 
             stopwatch.Start();
-            // Parrarel.Foreach(przestrzen.trojkaty, FillPolygon);
-            //Parallel.ForEach(przestrzen.trojkaty, FillPolygon);
-            //int i = 0;
-            //foreach (var trojkat in przestrzen.trojkaty)
-            //{
-            //    if(i%2==0)
-            //    FillPolygon(trojkat);
-            //    i++;
-            //}
-            Parallel.ForEach(przestrzen.trojkaty, trojkat =>
+            
+            Parallel.ForEach(space.triangles, triangle =>
             {
                 List<Segment> lista = new List<Segment>
     {
-        new Segment(trojkat.P1, trojkat.P2),
-        new Segment(trojkat.P2, trojkat.P3),
-        new Segment(trojkat.P3, trojkat.P1)
+        new Segment(triangle.P1, triangle.P2),
+        new Segment(triangle.P2, triangle.P3),
+        new Segment(triangle.P3, triangle.P1)
     };
 
                 FillPolygon2(lista);
             });
 
-            //int i = 0;
-            //foreach (var trojkat in przestrzen.trojkaty)
-            //{
-            //    if(trojkat.P1.X==1)
-            //    { i = i; }
-            //    if (i % 2 == 1)
-            //    {
-            //        List<Segment> lista = new List<Segment>
-            //{
-            //    new Segment(trojkat.P1, trojkat.P2),
-            //    new Segment(trojkat.P2, trojkat.P3),
-            //    new Segment(trojkat.P3, trojkat.P1)
-            //};
-
-            //        FillPolygon2(lista);
-            //    }
-            //    i++;
-            //}
-
-            //            FillPolygon2(lista);
-            //        });
+           ;
 
             stopwatch.Stop();
             label2.Text = $"{stopwatch.ElapsedMilliseconds}";
@@ -238,32 +203,29 @@ namespace grafa20
                     {
 
 
-                        float u = wroc(j);
-                        float v = wroc(y);
-                        if (j == 233 && y == 120)
-                        {
-                            j = j;
-                        }
+                        float u = tofloat(j);
+                        float v = tofloat(y);
                         if (j == -1) j = 0;
 
-                        Vector3 gdzie = new Vector3(u, v, przestrzen.Zety[j, y]);
+
+                        Vector3 gdzie = new Vector3(u, v, space.Zety[j, y]);
 
 
-                        Vector3 aa = przestrzen.WektoryNormalne[j, y];
+                        Vector3 aa = space.NormalVectors[j, y];
 
-                        Vector3 wersor = obliczWersorSwiatla(przestrzen.swiatlo, gdzie);
-                        Color obiektu = przestrzen.IO;
-                        if (przestrzen.normalcolor != null)
-                            obiektu = przestrzen.ImageColors[j, y];
+                        Vector3 wersor = obliczWersorSwiatla(space.swiatlo, gdzie);
+                        Color obiektu = space.IO;
+                        if (space.normalcolor != null)
+                            obiektu = space.ImageColors[j, y];
 
 
 
-                        (int r, int g, int bb) = ObliczKolor(aa, wersor, new Vector3(0, 0, 1), przestrzen.kd, przestrzen.ks, przestrzen.m, obiektu, przestrzen.IL);
+                        (int r, int g, int bb) = CalculateColor(aa, wersor, new Vector3(0, 0, 1), space.kd, space.ks, space.m, obiektu, space.IL);
                         Vector3 p = new Vector3(j, y, 0);
-                        if (przestrzen.transform == true)
+                        if (space.transform == true)
                         {
-                            p = new Vector3(j, y, przestrzen.Zety[j, y] * 400);
-                            p = Vector3.Transform(p, przestrzen.M);
+                            p = new Vector3(j, y, space.Zety[j, y] * 400);
+                            p = Vector3.Transform(p, space.M);
                         }
                         if (p.X >= 0 && p.Y >= 0 && p.X <= 499 && p.Y <= 499)
                             DrawPixel(r, g, bb, (int)p.X, (int)p.Y);
@@ -284,16 +246,16 @@ namespace grafa20
 
         private void trackBar2_Scroll(object sender, EventArgs e)
         {
-            przestrzen.swiatlo.X = trackBar2.Value / 10f;
-            //  Vector3.Normalize(przestrzen.swiatlo);
+            space.swiatlo.X = trackBar2.Value / 10f;
+            //  Vector3.Normalize(space.swiatlo);
             draw();
 
         }
 
         private void trackBar3_Scroll(object sender, EventArgs e)
         {
-            przestrzen.swiatlo.Y = trackBar3.Value / 10f;
-            //   Vector3.Normalize(przestrzen.swiatlo);
+            space.swiatlo.Y = trackBar3.Value / 10f;
+            //   Vector3.Normalize(space.swiatlo);
             draw();
 
         }
@@ -308,8 +270,8 @@ namespace grafa20
             if (colorDialog1.ShowDialog() == DialogResult.OK)
             {
 
-                przestrzen.IO = colorDialog1.Color;
-                przestrzen.normalcolor = null;
+                space.IO = colorDialog1.Color;
+                space.normalcolor = null;
                 draw();
             }
 
@@ -322,7 +284,7 @@ namespace grafa20
             if (colorDialog1.ShowDialog() == DialogResult.OK)
             {
 
-                przestrzen.IL = colorDialog1.Color;
+                space.IL = colorDialog1.Color;
                 draw();
             }
         }
@@ -341,12 +303,12 @@ namespace grafa20
                 // Teraz mo¿esz wczytaæ plik graficzny
                 Bitmap originalImage = new Bitmap(filePath);
                 Bitmap resizedImage = new Bitmap(originalImage, new Size(500, 500));
-                przestrzen.normalcolor = resizedImage;
+                space.normalcolor = resizedImage;
                 for (int x = 0; x < resizedImage.Width; x++)
                 {
                     for (int y = 0; y < resizedImage.Height; y++)
                     {
-                        przestrzen.ImageColors[x, y] = resizedImage.GetPixel(x, y);
+                        space.ImageColors[x, y] = resizedImage.GetPixel(x, y);
 
                     }
                 }
@@ -370,17 +332,17 @@ namespace grafa20
                
                 Bitmap originalImage = new Bitmap(filePath);
                 Bitmap resizedImage = new Bitmap(originalImage, new Size(500, 500));
-                przestrzen.normalmap = resizedImage;
+                space.normalmap = resizedImage;
 
                 for (int x = 0; x < resizedImage.Width; x++)
                 {
                     for (int y = 0; y < resizedImage.Height; y++)
                     {
-                        przestrzen.BitmapVector[x, y] = przestrzen.ColorToNormalVector(resizedImage.GetPixel(x, y));
+                        space.BitmapVector[x, y] = space.ColorToNormalVector(resizedImage.GetPixel(x, y));
                     
                     }
                 }
-                przestrzen.ObliczZiWektory();
+                space.ObliczZiWektory();
                 draw();
 
             }
@@ -395,23 +357,23 @@ namespace grafa20
                 Bitmap originalImage = new Bitmap(Properties.Resources.normal_map_example);
 
                 Bitmap resizedImage = new Bitmap(originalImage, new Size(500, 500));
-                przestrzen.normalmap = resizedImage;
+                space.normalmap = resizedImage;
 
                 for (int x = 0; x < resizedImage.Width; x++)
                 {
                     for (int y = 0; y < resizedImage.Height; y++)
                     {
-                        przestrzen.BitmapVector[x, y] = przestrzen.ColorToNormalVector(resizedImage.GetPixel(x, y));
+                        space.BitmapVector[x, y] = space.ColorToNormalVector(resizedImage.GetPixel(x, y));
 
                     }
                 }
-                przestrzen.ObliczZiWektory();
+                space.ObliczZiWektory();
                 draw();
             }
             else
             {
-                przestrzen.normalmap = null;
-                przestrzen.ObliczZiWektory();
+                space.normalmap = null;
+                space.ObliczZiWektory();
                 draw();
             }
         }
@@ -425,12 +387,12 @@ namespace grafa20
                 Bitmap originalImage = new Bitmap(Properties.Resources.original);
 
                 Bitmap resizedImage = new Bitmap(originalImage, new Size(500, 500));
-                przestrzen.normalcolor = resizedImage;
+                space.normalcolor = resizedImage;
                 for (int x = 0; x < resizedImage.Width; x++)
                 {
                     for (int y = 0; y < resizedImage.Height; y++)
                     {
-                        przestrzen.ImageColors[x, y] = resizedImage.GetPixel(x, y);
+                        space.ImageColors[x, y] = resizedImage.GetPixel(x, y);
 
                     }
                 }
@@ -440,7 +402,7 @@ namespace grafa20
             }
             else
             {
-                przestrzen.normalcolor = null;
+                space.normalcolor = null;
 
                 draw();
             }
@@ -460,9 +422,9 @@ namespace grafa20
 
         private void trackBar6_Scroll(object sender, EventArgs e)
         {
-            przestrzen.swiatlo.Z = trackBar6.Value / 5.0f;
+            space.swiatlo.Z = trackBar6.Value / 5.0f;
             label12.Text = $"z: {trackBar6.Value / 5.0f}";
-            //   Vector3.Normalize(przestrzen.swiatlo);
+            //   Vector3.Normalize(space.swiatlo);
             draw();
         }
 
@@ -470,12 +432,12 @@ namespace grafa20
         {
             if (checkBox4.Checked == true)
             {
-                siatkatroj = 1;
+                trianglevave = 1;
                 draw();
             }
             else
             {
-                siatkatroj = 0;
+                trianglevave = 0;
                 draw();
             }
         }
@@ -484,12 +446,12 @@ namespace grafa20
         {
             if (checkBox5.Checked == true)
             {
-                siatka = 1;
+                nets = 1;
                 draw();
             }
             else
             {
-                siatka = 0;
+                nets = 0;
                 draw();
             }
         }
@@ -498,8 +460,8 @@ namespace grafa20
         {
             t += 0.08f; 
 
-            przestrzen.swiatlo.X = (cx + a * (float)Math.Cos(t)) / 499.0f;
-            przestrzen.swiatlo.Y = (cy + b * (float)Math.Sin(t)) / 499.0f;
+            space.swiatlo.X = (cx + a * (float)Math.Cos(t)) / 499.0f;
+            space.swiatlo.Y = (cy + b * (float)Math.Sin(t)) / 499.0f;
 
             draw();
         }
@@ -512,20 +474,20 @@ namespace grafa20
 
         private void trackBar5_Scroll(object sender, EventArgs e)
         {
-            przestrzen.kd = trackBar5.Value / 10f;
+            space.kd = trackBar5.Value / 10f;
 
             draw();
         }
 
         private void trackBar7_Scroll(object sender, EventArgs e)
         {
-            przestrzen.m = trackBar7.Value;
+            space.m = trackBar7.Value;
 
             draw();
         }
         private void trackBar4_Scroll(object sender, EventArgs e)
         {
-            przestrzen.ks = trackBar4.Value / 10f;
+            space.ks = trackBar4.Value / 10f;
 
             draw();
         }
@@ -554,19 +516,19 @@ namespace grafa20
                 for (int j = 0; j < 4; j++)
                 {
                   
-                    float scaledX = przestrzen.PunktyBaz[i, j].X * scaleX;
-                    float scaledY = przestrzen.PunktyBaz[i, j].Y * scaleY;
+                    float scaledX = space.BasePoints[i, j].X * scaleX;
+                    float scaledY = space.BasePoints[i, j].Y * scaleY;
 
                   
                     if (Math.Abs(scaledX - coordinates.X) < 10 && Math.Abs(scaledY - coordinates.Y) < 10)
                     {
                       //klikniecie zmiana z punktu 
-                        przestrzen.PunktyBaz[i, j].Z = trackBar8.Value / 10.0f;
+                        space.BasePoints[i, j].Z = trackBar8.Value / 10.0f;
                     }
                 }
             }
-            przestrzen.InicjujPunkty();
-            przestrzen.ObliczZiWektory();
+            space.InitPoints();
+            space.ObliczZiWektory();
             draw();
         }
 
@@ -577,42 +539,7 @@ namespace grafa20
 
         private void label12_Click(object sender, EventArgs e)
         {
-            //OpenFileDialog openFileDialog = new OpenFileDialog
-            //{
-            //    Title = "Wybierz plik TXT",
-            //    Filter = "Plik tekstowy (*.txt)|*.txt|Wszystkie pliki (*.*)|*.*"
-            //};
-
-            //if (openFileDialog.ShowDialog() == DialogResult.OK)
-            //{
-            //    string filePath = openFileDialog.FileName;
-
-            //    try
-            //    {
-            //        string zawartoscPliku = File.ReadAllText(filePath);
-            //        float[] liczby = zawartoscPliku.Split(';')
-            //                                       .Select(float.Parse)
-            //                                       .ToArray();
-
-            //        if (liczby.Length != 16)
-            //        {
-            //            throw new InvalidOperationException("Plik powinien zawieraæ dok³adnie 16 liczb.");
-            //        }
-
-            //        int licznik = 0;
-            //        for (int i = 0; i < 4; i++)
-            //        {
-            //            for (int j = 0; j < 4; j++)
-            //            {
-            //                punkty[i, j].Z = liczby[licznik++];
-            //            }
-            //        }
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        Console.WriteLine("Wyst¹pi³ b³¹d: " + ex.Message);
-            //    }
-            //}
+           
         }
 
         private void checkBox6_CheckedChanged(object sender, EventArgs e)
@@ -626,10 +553,10 @@ namespace grafa20
                         DrawPixel(0, 0, 0, i, j);
                     }
                 }
-                przestrzen.swiatlo.Z = 1.0f;
-                przestrzen.sfera = true;
-                przestrzen.InicjujPunkty();
-                przestrzen.ObliczZiWektory();
+                space.swiatlo.Z = 1.0f;
+                space.sfera = true;
+                space.InitPoints();
+                space.ObliczZiWektory();
                 draw();
             }
             else
@@ -641,9 +568,9 @@ namespace grafa20
                         DrawPixel(0, 0, 0, i, j);
                     }
                 }
-                przestrzen.sfera = false;
-                przestrzen.InicjujPunkty();
-                przestrzen.ObliczZiWektory();
+                space.sfera = false;
+                space.InitPoints();
+                space.ObliczZiWektory();
                 draw();
             }
         }
@@ -652,17 +579,17 @@ namespace grafa20
         {
             if (checkBox7.Checked == true)
             {
-                przestrzen.transform = true;
+                space.transform = true;
             }
             else
             {
-                przestrzen.transform = false;
+                space.transform = false;
             }
         }
 
         private void trackBar10_Scroll(object sender, EventArgs e)
         {
-            przestrzen.alfa = trackBar10.Value / 5.0f;
+            space.alfa = trackBar10.Value / 5.0f;
             for (int i = 0; i < 500; i++)
             {
                 for (int j = 0; j < 500; j++)
@@ -670,13 +597,13 @@ namespace grafa20
                     DrawPixel(0, 0, 0, i, j);
                 }
             }
-            przestrzen.M = Matrix4x4.CreateTranslation(-przestrzen.height / 2, -przestrzen.width / 2, 0) * Matrix4x4.CreateFromYawPitchRoll(0, przestrzen.alfa, przestrzen.beta) * Matrix4x4.CreateTranslation(przestrzen.height / 2, przestrzen.width / 2, 0);
+            space.M = Matrix4x4.CreateTranslation(-space.height / 2, -space.width / 2, 0) * Matrix4x4.CreateFromYawPitchRoll(0, space.alfa, space.beta) * Matrix4x4.CreateTranslation(space.height / 2, space.width / 2, 0);
             draw();
         }
 
         private void trackBar9_Scroll(object sender, EventArgs e)
         {
-            przestrzen.beta = trackBar9.Value / 5.0f;
+            space.beta = trackBar9.Value / 5.0f;
 
             for (int i = 0; i < 500; i++)
             {
@@ -685,7 +612,7 @@ namespace grafa20
                     DrawPixel(0, 0, 0, i, j);
                 }
             }
-            przestrzen.M = Matrix4x4.CreateTranslation(-przestrzen.height / 2, -przestrzen.width / 2, 0) * Matrix4x4.CreateFromYawPitchRoll(0, przestrzen.alfa, przestrzen.beta) * Matrix4x4.CreateTranslation(przestrzen.height / 2, przestrzen.width / 2, 0);
+            space.M = Matrix4x4.CreateTranslation(-space.height / 2, -space.width / 2, 0) * Matrix4x4.CreateFromYawPitchRoll(0, space.alfa, space.beta) * Matrix4x4.CreateTranslation(space.height / 2, space.width / 2, 0);
             draw();
         }
 

@@ -10,22 +10,22 @@ using System.Security.Policy;
 
 namespace grafa20
 {
-    public class Przestrzen
+    public class Space
     {
-        public Vector3[,] PunktyBaz { get; set; }
+        public Vector3[,] BasePoints { get; set; }
         public bool sfera = false;
-        public Dictionary<(int, int), Vector3> PunktyTroj { get; set; }
-        public Dictionary<(int, int), Vector3> WektoryTroj { get; set; }
+        public Dictionary<(int, int), Vector3> TrianglePoints { get; set; }
+        public Dictionary<(int, int), Vector3> VectorsTriagles { get; set; }
         public Bitmap normalcolor;
-        public List<Trojkat> trojkaty = new List<Trojkat>();
-        public Vector3[,] WektoryNormalne = new Vector3[500, 500];
+        public List<Triangle> triangles = new List<Triangle>();
+        public Vector3[,] NormalVectors = new Vector3[500, 500];
         public float[,] Zety = new float[500, 500]; 
         public GCHandle BitsHanle { get; set; }
         public Byte[] pixels;
-        public Bitmap wyswietl;
+        public Bitmap vieew;
         public Bitmap normalmap;
        // public Bitmap normalmap;
-        public int podzial = 5;
+        public int numofdivision = 5;
         public Color IO = Color.Red;
         public Color IL = Color.White;
         public Color[,] ImageColors = new Color[500, 500];
@@ -47,15 +47,15 @@ namespace grafa20
         public float beta = 0.1f;
         public bool transform = false;
         public Matrix4x4 M;
-        public Przestrzen()
+        public Space()
         {
             sferasrodek = new Vector3(1.0f / 2.0f, 1.0f / 2.0f, 0);
-            PunktyTroj = new Dictionary<(int, int), Vector3>();
-            WektoryTroj= new Dictionary<(int, int), Vector3>();
+            TrianglePoints = new Dictionary<(int, int), Vector3>();
+            VectorsTriagles= new Dictionary<(int, int), Vector3>();
 
             M = Matrix4x4.CreateTranslation(-height / 2, -width / 2, 0) * Matrix4x4.CreateFromYawPitchRoll(0, alfa, beta) * Matrix4x4.CreateTranslation(height / 2, width / 2, 0);
 
-            PunktyBaz = new Vector3[4, 4];
+            BasePoints = new Vector3[4, 4];
             for (int i = 0; i < 4; i++)
             {
                 for (int j = 0; j < 4; j++)
@@ -63,40 +63,34 @@ namespace grafa20
                    
 
                     float z = 0;
-                    //if ((i == 1 || i == 2) && (j == 1 || j == 2))
-                    //{
-                    //    z = 0.3f;
-                    //}
+                   
 
-                    PunktyBaz[i, j] = new Vector3(i / 3.0f, j / 3.0f, z);
+                    BasePoints[i, j] = new Vector3(i / 3.0f, j / 3.0f, z);
                 }
             }
-            InicjujPunkty();
+            InitPoints();
         }
         public Vector3 swiatlo = new Vector3(0.5f,0.5f,0.25f);
-        //funkcja uzywana przy stacie programu i zmianie trangulacjji 
-        public void InicjujPunkty()
+       
+        public void InitPoints()
         {
-            PunktyTroj = new Dictionary<(int, int), Vector3>();
-            WektoryTroj = new Dictionary<(int, int), Vector3>();
-            trojkaty = new List<Trojkat>();
-            for (int i = 0; i <= 3 * podzial; i++)
+            TrianglePoints = new Dictionary<(int, int), Vector3>();
+            VectorsTriagles = new Dictionary<(int, int), Vector3>();
+            triangles = new List<Triangle>();
+            for (int i = 0; i <= 3 * numofdivision; i++)
             {
-                for (int j = 0; j <= 3 * podzial; j++)
+                for (int j = 0; j <= 3 * numofdivision; j++)
                 {
                     if(sfera==false)
                     { 
-                    PunktyTroj[(i, j)] = new Vector3(i / (3.0f * podzial), j / (3.0f * podzial), OblicZ(i / (3.0f * podzial), j / (3.0f * podzial)));
-                    WektoryTroj[(i, j)] = ObliczWektorNormalny(PunktyBaz, 3, 3, i / (3.0f * podzial), j / (3.0f * podzial));
+                    TrianglePoints[(i, j)] = new Vector3(i / (3.0f * numofdivision), j / (3.0f * numofdivision), OblicZ(i / (3.0f * numofdivision), j / (3.0f * numofdivision)));
+                    VectorsTriagles[(i, j)] = ObliczWektorNormalny(BasePoints, 3, 3, i / (3.0f * numofdivision), j / (3.0f * numofdivision));
                     }
                     else
                     {
-                        if(i==0&&j==0)
-                        {
-                            i = i;
-                        }
-                        PunktyTroj[(i, j)] = new Vector3(i / (3.0f * podzial), j / (3.0f * podzial), OblicZsfera(i / (3.0f * podzial), j / (3.0f * podzial)));
-                       WektoryTroj[(i, j)] = ObliczWektorsfera(PunktyTroj[( i,j)]);
+                        
+                        TrianglePoints[(i, j)] = new Vector3(i / (3.0f * numofdivision), j / (3.0f * numofdivision), OblicZsfera(i / (3.0f * numofdivision), j / (3.0f * numofdivision)));
+                       VectorsTriagles[(i, j)] = ObliczWektorsfera(TrianglePoints[( i,j)]);
                     }
                 }
             }
@@ -108,19 +102,19 @@ namespace grafa20
              
             
 
-            for (int i = 0; i < 3 * podzial; i++)
+            for (int i = 0; i < 3 * numofdivision; i++)
             {
-                for (int j = 0; j < 3 * podzial; j++)
+                for (int j = 0; j < 3 * numofdivision; j++)
                 {
-                    trojkaty.Add(new Trojkat(
-                        PunktyTroj[(i, j)],
-                        PunktyTroj[(i, j + 1)],
-                        PunktyTroj[(i + 1, j)]));
+                    triangles.Add(new Triangle(
+                        TrianglePoints[(i, j)],
+                        TrianglePoints[(i, j + 1)],
+                        TrianglePoints[(i + 1, j)]));
 
-                    trojkaty.Add(new Trojkat(
-                        PunktyTroj[(i + 1, j)],
-                        PunktyTroj[(i, j + 1)],
-                        PunktyTroj[(i + 1, j + 1)]));
+                    triangles.Add(new Triangle(
+                        TrianglePoints[(i + 1, j)],
+                        TrianglePoints[(i, j + 1)],
+                        TrianglePoints[(i + 1, j + 1)]));
                 }
             }
         }
@@ -138,7 +132,7 @@ namespace grafa20
             {
                 for (int j = 0; j < 4; j++)
                 {
-                    z += PunktyBaz[i, j].Z * CalculateB(i, x) * CalculateB(j, y);
+                    z += BasePoints[i, j].Z * CalculateB(i, x) * CalculateB(j, y);
                 }
             }
             return z;
@@ -169,15 +163,15 @@ namespace grafa20
 
         public void ObliczZiWektory()
         {
-            //Parallel.ForEach(trojkaty, obliczanie);
+           
 
-            Parallel.ForEach(trojkaty, trojkat =>
+            Parallel.ForEach(triangles, triangle =>
             {
                 List<Segment> lista = new List<Segment>
     {
-                        new Segment(trojkat.P1, trojkat.P2),
-                        new Segment(trojkat.P2, trojkat.P3),
-                        new Segment(trojkat.P3, trojkat.P1)
+                        new Segment(triangle.P1, triangle.P2),
+                        new Segment(triangle.P2, triangle.P3),
+                        new Segment(triangle.P3, triangle.P1)
     };
 
                 obliczanie2(lista);
@@ -196,12 +190,12 @@ namespace grafa20
             float ymin1 = float.MaxValue;
             float ymax1 = float.MinValue;
 
-            int ax = (int)(a.X * 3 * podzial);
-            int ay = (int)(a.Y * 3 * podzial);
-            int bx = (int)(b.X * 3 * podzial);
-            int by = (int)(b.Y * 3 * podzial);
-            int cx = (int)(c.X * 3 * podzial);
-            int cy = (int)(c.Y * 3 * podzial);
+            int ax = (int)(a.X * 3 * numofdivision);
+            int ay = (int)(a.Y * 3 * numofdivision);
+            int bx = (int)(b.X * 3 * numofdivision);
+            int by = (int)(b.Y * 3 * numofdivision);
+            int cx = (int)(c.X * 3 * numofdivision);
+            int cy = (int)(c.Y * 3 * numofdivision);
 
             foreach (var segment in krawedzie)
             {
@@ -260,8 +254,8 @@ namespace grafa20
                     {
 
 
-                        float u = wroc(j);
-                        float v = wroc(y);
+                        float u = tofloat(j);
+                        float v = tofloat(y);
                         if (j == -1) j = 0;
                       
                         float z = Barycentric2D(u, v, a, b, c);
@@ -269,13 +263,13 @@ namespace grafa20
                         Vector3 gdzie = new Vector3(u, v, z);
 
 
-                        Vector3 aa = Barycentric3D(gdzie, a, b, c, WektoryTroj[(ax, ay)], WektoryTroj[(bx, by)], WektoryTroj[(cx, cy)]);
+                        Vector3 aa = Barycentric3D(gdzie, a, b, c, VectorsTriagles[(ax, ay)], VectorsTriagles[(bx, by)], VectorsTriagles[(cx, cy)]);
                         if (normalmap != null)
                         {
                             aa = WektorPrzeksztalcony(aa, j, y);
                         }
 
-                        WektoryNormalne[j, y] = aa;
+                        NormalVectors[j, y] = aa;
 
                         Zety[j, y] = z;
                         

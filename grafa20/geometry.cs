@@ -162,13 +162,13 @@ namespace grafa20
 
             return (int)(a * 499);
         }
-        public static float wroc(int a)
+        public static float tofloat(int a)
         {
             return a / 499f;
         }
 
 
-        public static (int, int, int) ObliczKolor(Vector3 N, Vector3 L, Vector3 V, float kd, float ks, float m, Color IO, Color IL)
+        public static (int, int, int) CalculateColor(Vector3 N, Vector3 L, Vector3 V, float kd, float ks, float m, Color IO, Color IL)
         {
 
             float IO_R = IO.R / 255f;

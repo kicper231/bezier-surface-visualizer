@@ -527,6 +527,8 @@ namespace grafa20
             ClientSize = new Size(905, 501);
             Controls.Add(groupBox1);
             Controls.Add(pictureBox1);
+            MaximumSize = new Size(923, 548);
+            MinimumSize = new Size(923, 548);
             Name = "Form1";
             Text = "GRAFIKA2";
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
