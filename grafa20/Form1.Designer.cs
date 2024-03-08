@@ -91,7 +91,7 @@ namespace grafa20
             // pictureBox1
             // 
             pictureBox1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
-            pictureBox1.Location = new Point(0, 0);
+            pictureBox1.Location = new Point(51, 58);
             pictureBox1.Margin = new Padding(0);
             pictureBox1.Name = "pictureBox1";
             pictureBox1.Size = new Size(500, 500);
@@ -140,9 +140,11 @@ namespace grafa20
             groupBox1.Controls.Add(label2);
             groupBox1.Controls.Add(label1);
             groupBox1.Controls.Add(trackBar1);
-            groupBox1.Location = new Point(515, 0);
+            groupBox1.Location = new Point(614, 0);
+            groupBox1.Margin = new Padding(4, 4, 4, 4);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(389, 500);
+            groupBox1.Padding = new Padding(4, 4, 4, 4);
+            groupBox1.Size = new Size(516, 625);
             groupBox1.TabIndex = 1;
             groupBox1.TabStop = false;
             groupBox1.Enter += groupBox1_Enter;
@@ -150,9 +152,10 @@ namespace grafa20
             // checkBox7
             // 
             checkBox7.AutoSize = true;
-            checkBox7.Location = new Point(207, 407);
+            checkBox7.Location = new Point(259, 509);
+            checkBox7.Margin = new Padding(4, 4, 4, 4);
             checkBox7.Name = "checkBox7";
-            checkBox7.Size = new Size(163, 24);
+            checkBox7.Size = new Size(194, 29);
             checkBox7.TabIndex = 36;
             checkBox7.Text = "włacz transformacje";
             checkBox7.UseVisualStyleBackColor = true;
@@ -161,43 +164,48 @@ namespace grafa20
             // label15
             // 
             label15.AutoSize = true;
-            label15.Location = new Point(293, 472);
+            label15.Location = new Point(366, 590);
+            label15.Margin = new Padding(4, 0, 4, 0);
             label15.Name = "label15";
-            label15.Size = new Size(39, 20);
+            label15.Size = new Size(47, 25);
             label15.TabIndex = 35;
             label15.Text = "beta";
             // 
             // label14
             // 
             label14.AutoSize = true;
-            label14.Location = new Point(135, 469);
+            label14.Location = new Point(169, 586);
+            label14.Margin = new Padding(4, 0, 4, 0);
             label14.Name = "label14";
-            label14.Size = new Size(34, 20);
+            label14.Size = new Size(40, 25);
             label14.TabIndex = 34;
             label14.Text = "alfa";
             // 
             // trackBar10
             // 
-            trackBar10.Location = new Point(109, 438);
+            trackBar10.Location = new Point(136, 548);
+            trackBar10.Margin = new Padding(4, 4, 4, 4);
             trackBar10.Name = "trackBar10";
-            trackBar10.Size = new Size(130, 56);
+            trackBar10.Size = new Size(162, 69);
             trackBar10.TabIndex = 33;
             trackBar10.Scroll += trackBar10_Scroll;
             // 
             // trackBar9
             // 
-            trackBar9.Location = new Point(248, 438);
+            trackBar9.Location = new Point(310, 548);
+            trackBar9.Margin = new Padding(4, 4, 4, 4);
             trackBar9.Name = "trackBar9";
-            trackBar9.Size = new Size(130, 56);
+            trackBar9.Size = new Size(162, 69);
             trackBar9.TabIndex = 32;
             trackBar9.Scroll += trackBar9_Scroll;
             // 
             // checkBox6
             // 
             checkBox6.AutoSize = true;
-            checkBox6.Location = new Point(13, 407);
+            checkBox6.Location = new Point(16, 509);
+            checkBox6.Margin = new Padding(4, 4, 4, 4);
             checkBox6.Name = "checkBox6";
-            checkBox6.Size = new Size(101, 24);
+            checkBox6.Size = new Size(118, 29);
             checkBox6.TabIndex = 31;
             checkBox6.Text = "Kula wlacz";
             checkBox6.UseVisualStyleBackColor = true;
@@ -208,9 +216,10 @@ namespace grafa20
             label13.AutoSize = true;
             label13.BackColor = Color.Transparent;
             label13.Font = new Font("Segoe UI", 6F, FontStyle.Regular, GraphicsUnit.Point);
-            label13.Location = new Point(30, 82);
+            label13.Location = new Point(38, 102);
+            label13.Margin = new Padding(4, 0, 4, 0);
             label13.Name = "label13";
-            label13.Size = new Size(0, 12);
+            label13.Size = new Size(0, 15);
             label13.TabIndex = 30;
             // 
             // label12
@@ -218,9 +227,10 @@ namespace grafa20
             label12.AutoSize = true;
             label12.BackColor = Color.Transparent;
             label12.Font = new Font("Segoe UI", 6F, FontStyle.Regular, GraphicsUnit.Point);
-            label12.Location = new Point(295, 82);
+            label12.Location = new Point(369, 102);
+            label12.Margin = new Padding(4, 0, 4, 0);
             label12.Name = "label12";
-            label12.Size = new Size(12, 12);
+            label12.Size = new Size(15, 15);
             label12.TabIndex = 29;
             label12.Text = "z:";
             label12.Click += label12_Click;
@@ -230,9 +240,10 @@ namespace grafa20
             label11.AutoSize = true;
             label11.BackColor = Color.Transparent;
             label11.Font = new Font("Segoe UI", 6F, FontStyle.Regular, GraphicsUnit.Point);
-            label11.Location = new Point(79, 23);
+            label11.Location = new Point(99, 29);
+            label11.Margin = new Padding(4, 0, 4, 0);
             label11.Name = "label11";
-            label11.Size = new Size(0, 12);
+            label11.Size = new Size(0, 15);
             label11.TabIndex = 28;
             label11.Click += label11_Click;
             // 
@@ -241,37 +252,41 @@ namespace grafa20
             zlabel.AutoSize = true;
             zlabel.BackColor = Color.Transparent;
             zlabel.Font = new Font("Segoe UI", 6F, FontStyle.Regular, GraphicsUnit.Point);
-            zlabel.Location = new Point(295, 26);
+            zlabel.Location = new Point(369, 32);
+            zlabel.Margin = new Padding(4, 0, 4, 0);
             zlabel.Name = "zlabel";
-            zlabel.Size = new Size(13, 12);
+            zlabel.Size = new Size(17, 15);
             zlabel.TabIndex = 27;
             zlabel.Text = "Z:";
             // 
             // label10
             // 
             label10.AutoSize = true;
-            label10.Location = new Point(252, 57);
+            label10.Location = new Point(315, 71);
+            label10.Margin = new Padding(4, 0, 4, 0);
             label10.Name = "label10";
-            label10.Size = new Size(109, 20);
+            label10.Size = new Size(133, 25);
             label10.TabIndex = 26;
             label10.Text = "zmien z punktu";
             label10.Click += label10_Click;
             // 
             // trackBar8
             // 
-            trackBar8.Location = new Point(225, 32);
+            trackBar8.Location = new Point(281, 40);
+            trackBar8.Margin = new Padding(4, 4, 4, 4);
             trackBar8.Maximum = 20;
             trackBar8.Name = "trackBar8";
-            trackBar8.Size = new Size(153, 56);
+            trackBar8.Size = new Size(191, 69);
             trackBar8.TabIndex = 25;
             trackBar8.Scroll += trackBar8_Scroll;
             // 
             // checkBox5
             // 
             checkBox5.AutoSize = true;
-            checkBox5.Location = new Point(274, 159);
+            checkBox5.Location = new Point(342, 199);
+            checkBox5.Margin = new Padding(4, 4, 4, 4);
             checkBox5.Name = "checkBox5";
-            checkBox5.Size = new Size(104, 24);
+            checkBox5.Size = new Size(125, 29);
             checkBox5.TabIndex = 24;
             checkBox5.Text = "siatka bazy";
             checkBox5.UseVisualStyleBackColor = true;
@@ -280,9 +295,10 @@ namespace grafa20
             // checkBox4
             // 
             checkBox4.AutoSize = true;
-            checkBox4.Location = new Point(137, 159);
+            checkBox4.Location = new Point(171, 199);
+            checkBox4.Margin = new Padding(4, 4, 4, 4);
             checkBox4.Name = "checkBox4";
-            checkBox4.Size = new Size(134, 24);
+            checkBox4.Size = new Size(160, 29);
             checkBox4.TabIndex = 23;
             checkBox4.Text = "Siatka trojkatna";
             checkBox4.UseVisualStyleBackColor = true;
@@ -291,18 +307,20 @@ namespace grafa20
             // label9
             // 
             label9.AutoSize = true;
-            label9.Location = new Point(21, 237);
+            label9.Location = new Point(26, 296);
+            label9.Margin = new Padding(4, 0, 4, 0);
             label9.Name = "label9";
-            label9.Size = new Size(107, 20);
+            label9.Size = new Size(130, 25);
             label9.TabIndex = 22;
             label9.Text = "wpólczynnik m";
             // 
             // trackBar7
             // 
-            trackBar7.Location = new Point(11, 212);
+            trackBar7.Location = new Point(14, 265);
+            trackBar7.Margin = new Padding(4, 4, 4, 4);
             trackBar7.Minimum = 1;
             trackBar7.Name = "trackBar7";
-            trackBar7.Size = new Size(130, 56);
+            trackBar7.Size = new Size(162, 69);
             trackBar7.TabIndex = 21;
             trackBar7.Value = 1;
             trackBar7.Scroll += trackBar7_Scroll;
@@ -310,18 +328,20 @@ namespace grafa20
             // label8
             // 
             label8.AutoSize = true;
-            label8.Location = new Point(178, 237);
+            label8.Location = new Point(222, 296);
+            label8.Margin = new Padding(4, 0, 4, 0);
             label8.Name = "label8";
-            label8.Size = new Size(22, 20);
+            label8.Size = new Size(29, 25);
             label8.TabIndex = 20;
             label8.Text = "ks";
             // 
             // label7
             // 
             label7.AutoSize = true;
-            label7.Location = new Point(295, 237);
+            label7.Location = new Point(369, 296);
+            label7.Margin = new Padding(4, 0, 4, 0);
             label7.Name = "label7";
-            label7.Size = new Size(25, 20);
+            label7.Size = new Size(32, 25);
             label7.TabIndex = 19;
             label7.Text = "kd";
             label7.Click += label7_Click;
@@ -329,18 +349,20 @@ namespace grafa20
             // label6
             // 
             label6.AutoSize = true;
-            label6.Location = new Point(295, 114);
+            label6.Location = new Point(369, 142);
+            label6.Margin = new Padding(4, 0, 4, 0);
             label6.Name = "label6";
-            label6.Size = new Size(66, 20);
+            label6.Size = new Size(78, 25);
             label6.TabIndex = 18;
             label6.Text = "z swiatla";
             // 
             // checkBox3
             // 
             checkBox3.AutoSize = true;
-            checkBox3.Location = new Point(21, 159);
+            checkBox3.Location = new Point(26, 199);
+            checkBox3.Margin = new Padding(4, 4, 4, 4);
             checkBox3.Name = "checkBox3";
-            checkBox3.Size = new Size(93, 24);
+            checkBox3.Size = new Size(110, 29);
             checkBox3.TabIndex = 17;
             checkBox3.Text = "Animacja";
             checkBox3.UseVisualStyleBackColor = true;
@@ -348,27 +370,30 @@ namespace grafa20
             // 
             // trackBar6
             // 
-            trackBar6.Location = new Point(254, 88);
+            trackBar6.Location = new Point(318, 110);
+            trackBar6.Margin = new Padding(4, 4, 4, 4);
             trackBar6.Name = "trackBar6";
-            trackBar6.Size = new Size(130, 56);
+            trackBar6.Size = new Size(162, 69);
             trackBar6.TabIndex = 16;
             trackBar6.Value = 5;
             trackBar6.Scroll += trackBar6_Scroll;
             // 
             // trackBar5
             // 
-            trackBar5.Location = new Point(259, 212);
+            trackBar5.Location = new Point(324, 265);
+            trackBar5.Margin = new Padding(4, 4, 4, 4);
             trackBar5.Name = "trackBar5";
-            trackBar5.Size = new Size(130, 56);
+            trackBar5.Size = new Size(162, 69);
             trackBar5.TabIndex = 15;
             trackBar5.Value = 5;
             trackBar5.Scroll += trackBar5_Scroll;
             // 
             // trackBar4
             // 
-            trackBar4.Location = new Point(134, 212);
+            trackBar4.Location = new Point(168, 265);
+            trackBar4.Margin = new Padding(4, 4, 4, 4);
             trackBar4.Name = "trackBar4";
-            trackBar4.Size = new Size(130, 56);
+            trackBar4.Size = new Size(162, 69);
             trackBar4.TabIndex = 14;
             trackBar4.Value = 5;
             trackBar4.Scroll += trackBar4_Scroll;
@@ -377,9 +402,10 @@ namespace grafa20
             // 
             checkBox2.AutoSize = true;
             checkBox2.Font = new Font("Segoe UI", 8F, FontStyle.Regular, GraphicsUnit.Point);
-            checkBox2.Location = new Point(225, 349);
+            checkBox2.Location = new Point(281, 436);
+            checkBox2.Margin = new Padding(4, 4, 4, 4);
             checkBox2.Name = "checkBox2";
-            checkBox2.Size = new Size(146, 23);
+            checkBox2.Size = new Size(166, 25);
             checkBox2.TabIndex = 13;
             checkBox2.Text = "Domyslna tekstura";
             checkBox2.UseVisualStyleBackColor = true;
@@ -388,9 +414,10 @@ namespace grafa20
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(6, 444);
+            label5.Location = new Point(8, 555);
+            label5.Margin = new Padding(4, 0, 4, 0);
             label5.Name = "label5";
-            label5.Size = new Size(97, 20);
+            label5.Size = new Size(117, 25);
             label5.TabIndex = 12;
             label5.Text = "performance:";
             // 
@@ -398,9 +425,10 @@ namespace grafa20
             // 
             checkBox1.AutoSize = true;
             checkBox1.Font = new Font("Segoe UI", 8F, FontStyle.Regular, GraphicsUnit.Point);
-            checkBox1.Location = new Point(21, 349);
+            checkBox1.Location = new Point(26, 436);
+            checkBox1.Margin = new Padding(4, 4, 4, 4);
             checkBox1.Name = "checkBox1";
-            checkBox1.Size = new Size(177, 23);
+            checkBox1.Size = new Size(203, 25);
             checkBox1.TabIndex = 11;
             checkBox1.Text = "Domyślna normal mapa";
             checkBox1.UseVisualStyleBackColor = true;
@@ -409,9 +437,10 @@ namespace grafa20
             // button4
             // 
             button4.Font = new Font("Segoe UI", 8F, FontStyle.Regular, GraphicsUnit.Point);
-            button4.Location = new Point(268, 274);
+            button4.Location = new Point(335, 342);
+            button4.Margin = new Padding(4, 4, 4, 4);
             button4.Name = "button4";
-            button4.Size = new Size(103, 69);
+            button4.Size = new Size(129, 86);
             button4.TabIndex = 10;
             button4.Text = "Wczytaj normalmape";
             button4.UseVisualStyleBackColor = true;
@@ -419,9 +448,10 @@ namespace grafa20
             // 
             // button3
             // 
-            button3.Location = new Point(149, 274);
+            button3.Location = new Point(186, 342);
+            button3.Margin = new Padding(4, 4, 4, 4);
             button3.Name = "button3";
-            button3.Size = new Size(103, 69);
+            button3.Size = new Size(129, 86);
             button3.TabIndex = 9;
             button3.Text = "Wczytaj teksture koloru";
             button3.UseVisualStyleBackColor = true;
@@ -429,9 +459,10 @@ namespace grafa20
             // 
             // button2
             // 
-            button2.Location = new Point(15, 274);
+            button2.Location = new Point(19, 342);
+            button2.Margin = new Padding(4, 4, 4, 4);
             button2.Name = "button2";
-            button2.Size = new Size(113, 29);
+            button2.Size = new Size(141, 36);
             button2.TabIndex = 8;
             button2.Text = "kolor swiatla";
             button2.UseVisualStyleBackColor = true;
@@ -439,9 +470,10 @@ namespace grafa20
             // 
             // button1
             // 
-            button1.Location = new Point(15, 309);
+            button1.Location = new Point(19, 386);
+            button1.Margin = new Padding(4, 4, 4, 4);
             button1.Name = "button1";
-            button1.Size = new Size(111, 34);
+            button1.Size = new Size(139, 42);
             button1.TabIndex = 7;
             button1.Text = "kolor tla";
             button1.UseVisualStyleBackColor = true;
@@ -450,9 +482,10 @@ namespace grafa20
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(159, 114);
+            label4.Location = new Point(199, 142);
+            label4.Margin = new Padding(4, 0, 4, 0);
             label4.Name = "label4";
-            label4.Size = new Size(68, 20);
+            label4.Size = new Size(82, 25);
             label4.TabIndex = 6;
             label4.Text = "swiatlo Y";
             label4.Click += label4_Click;
@@ -460,26 +493,29 @@ namespace grafa20
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(34, 114);
+            label3.Location = new Point(42, 142);
+            label3.Margin = new Padding(4, 0, 4, 0);
             label3.Name = "label3";
-            label3.Size = new Size(69, 20);
+            label3.Size = new Size(83, 25);
             label3.TabIndex = 5;
             label3.Text = "swiatlo X";
             // 
             // trackBar3
             // 
-            trackBar3.Location = new Point(125, 88);
+            trackBar3.Location = new Point(156, 110);
+            trackBar3.Margin = new Padding(4, 4, 4, 4);
             trackBar3.Name = "trackBar3";
-            trackBar3.Size = new Size(130, 56);
+            trackBar3.Size = new Size(162, 69);
             trackBar3.TabIndex = 4;
             trackBar3.Value = 5;
             trackBar3.Scroll += trackBar3_Scroll;
             // 
             // trackBar2
             // 
-            trackBar2.Location = new Point(11, 88);
+            trackBar2.Location = new Point(14, 110);
+            trackBar2.Margin = new Padding(4, 4, 4, 4);
             trackBar2.Name = "trackBar2";
-            trackBar2.Size = new Size(130, 56);
+            trackBar2.Size = new Size(162, 69);
             trackBar2.TabIndex = 3;
             trackBar2.Value = 5;
             trackBar2.Scroll += trackBar2_Scroll;
@@ -487,9 +523,10 @@ namespace grafa20
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(15, 464);
+            label2.Location = new Point(19, 580);
+            label2.Margin = new Padding(4, 0, 4, 0);
             label2.Name = "label2";
-            label2.Size = new Size(50, 20);
+            label2.Size = new Size(59, 25);
             label2.TabIndex = 2;
             label2.Text = "label2";
             // 
@@ -497,19 +534,21 @@ namespace grafa20
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Segoe UI", 7F, FontStyle.Regular, GraphicsUnit.Point);
-            label1.Location = new Point(34, 57);
+            label1.Location = new Point(42, 71);
+            label1.Margin = new Padding(4, 0, 4, 0);
             label1.Name = "label1";
-            label1.Size = new Size(130, 15);
+            label1.Size = new Size(148, 19);
             label1.TabIndex = 1;
             label1.Text = "dokladnosc triangulacji";
             // 
             // trackBar1
             // 
             trackBar1.LargeChange = 2;
-            trackBar1.Location = new Point(6, 26);
+            trackBar1.Location = new Point(8, 32);
+            trackBar1.Margin = new Padding(4, 4, 4, 4);
             trackBar1.Minimum = 2;
             trackBar1.Name = "trackBar1";
-            trackBar1.Size = new Size(192, 56);
+            trackBar1.Size = new Size(240, 69);
             trackBar1.SmallChange = 2;
             trackBar1.TabIndex = 0;
             trackBar1.Value = 8;
@@ -522,15 +561,18 @@ namespace grafa20
             // 
             // Form1
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(905, 501);
+            BackColor = Color.Black;
+            ClientSize = new Size(1126, 615);
             Controls.Add(groupBox1);
             Controls.Add(pictureBox1);
-            MaximumSize = new Size(923, 548);
-            MinimumSize = new Size(923, 548);
+            Margin = new Padding(4, 4, 4, 4);
+            MaximumSize = new Size(1148, 671);
+            MinimumSize = new Size(1148, 671);
             Name = "Form1";
             Text = "GRAFIKA2";
+            Load += Form1_Load;
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();

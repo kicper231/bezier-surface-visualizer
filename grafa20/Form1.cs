@@ -1,10 +1,7 @@
 using System.Diagnostics;
-using System.Diagnostics.Eventing.Reader;
 using System.Drawing.Imaging;
-using System.Globalization;
 using System.Numerics;
 using System.Runtime.InteropServices;
-using System.Windows.Forms;
 using static grafa20.Geometry;
 
 namespace grafa20
@@ -12,15 +9,16 @@ namespace grafa20
     public partial class Form1 : Form
     {
         public Space space;
-        Stopwatch stopwatch = new Stopwatch();
-        int trianglevave = 0;
-        int nets = 0;
-    
+        private Stopwatch stopwatch = new Stopwatch();
+        private int trianglevave = 0;
+        private int nets = 0;
+
         private float t = 0.0f;
         private float cx = 250;
         private float cy = 250;
         private float a = 200;
         private float b = 100;
+
         public Form1()
         {
             InitializeComponent();
@@ -30,40 +28,29 @@ namespace grafa20
             space.pixels = new Byte[width * height * 3];
             space.BitsHanle = GCHandle.Alloc(space.pixels, GCHandleType.Pinned);
             space.vieew = new Bitmap(width, height, width * 3, PixelFormat.Format24bppRgb, space.BitsHanle.AddrOfPinnedObject());
-            space.ObliczZiWektory();
+            space.CalculateZandVectors();
             draw();
-
         }
-
 
         public void DrawPixel(int r, int g, int b, int x, int y)
         {
-
-
             int currentLine = 3 * (y * 500 + x);
             space.pixels[currentLine] = (byte)b;
             space.pixels[currentLine + 1] = (byte)g;
             space.pixels[currentLine + 2] = (byte)r;
-
-
-
         }
 
         private void pictureBox1_Paint(object sender, PaintEventArgs e)
         {
-
-
             using (var g = Graphics.FromImage(space.vieew))
             {
-
                 if (trianglevave == 1)
                 {
                     foreach (var triangle in space.triangles)
                     {
-                      
-                        Vector3 transformedP1 = new Vector3(doint(triangle.P1.X), doint(triangle.P1.Y), space.Zety[doint(triangle.P1.X), doint(triangle.P1.Y)] );
-                        Vector3 transformedP2 = new Vector3(doint(triangle.P2.X), doint(triangle.P2.Y), space.Zety[doint(triangle.P2.X), doint(triangle.P1.Y)] );
-                        Vector3 transformedP3 = new Vector3(doint(triangle.P3.X), doint(triangle.P3.Y), space.Zety[doint(triangle.P3.X), doint(triangle.P3.Y)] );
+                        Vector3 transformedP1 = new Vector3(doint(triangle.P1.X), doint(triangle.P1.Y), space.Zety[doint(triangle.P1.X), doint(triangle.P1.Y)]);
+                        Vector3 transformedP2 = new Vector3(doint(triangle.P2.X), doint(triangle.P2.Y), space.Zety[doint(triangle.P2.X), doint(triangle.P1.Y)]);
+                        Vector3 transformedP3 = new Vector3(doint(triangle.P3.X), doint(triangle.P3.Y), space.Zety[doint(triangle.P3.X), doint(triangle.P3.Y)]);
 
                         if (space.transform == true)
                         {
@@ -72,7 +59,6 @@ namespace grafa20
                             transformedP3 = Vector3.Transform(transformedP3, space.M);
                         }
 
-                       
                         DrawTransformedLine(g, transformedP1, transformedP2);
                         DrawTransformedLine(g, transformedP2, transformedP3);
                         DrawTransformedLine(g, transformedP3, transformedP1);
@@ -106,7 +92,7 @@ namespace grafa20
 
                             if (y < 4 - 1)
                             {
-                                 Vector3 transformedNextPoint = new Vector3(doint(space.BasePoints[x, y + 1].X), doint(space.BasePoints[x, y + 1].Y), 0);
+                                Vector3 transformedNextPoint = new Vector3(doint(space.BasePoints[x, y + 1].X), doint(space.BasePoints[x, y + 1].Y), 0);
                                 if (space.transform == true)
                                 {
                                     transformedNextPoint = Vector3.Transform(transformedNextPoint, space.M);
@@ -114,7 +100,6 @@ namespace grafa20
                                 g.DrawLine(Pens.Black, transformedBasePoint.X, transformedBasePoint.Y, transformedNextPoint.X, transformedNextPoint.Y);
                             }
 
-                           
                             Vector3 transformedGridPoint = new Vector3(doint(space.BasePoints[x, y].X), doint(space.BasePoints[x, y].Y), 0);
                             if (space.transform == true)
                             {
@@ -128,24 +113,19 @@ namespace grafa20
                 }
             }
 
-
             e.Graphics.DrawImage(space.vieew, 0, 0);
-
         }
 
         private void DrawLine(Graphics g, Vector3 p1, Vector3 p2)
         {
-
             PointF point1 = new PointF(doint(p1.X), doint(p1.Y));
             PointF point2 = new PointF(doint(p2.X), doint(p2.Y));
-
 
             g.DrawLine(Pens.Black, point1, point2);
         }
 
-        void DrawTransformedLine(Graphics g, Vector3 start, Vector3 end)
+        private void DrawTransformedLine(Graphics g, Vector3 start, Vector3 end)
         {
-           
             g.DrawLine(Pens.Black, start.X, start.Y, end.X, end.Y);
         }
 
@@ -153,21 +133,16 @@ namespace grafa20
         {
             space.numofdivision = trackBar1.Value;
             space.InitPoints();
-            
-            space.ObliczZiWektory();
+
+            space.CalculateZandVectors();
             draw();
             pictureBox1.Invalidate();
-
         }
-
-
 
         public void draw()
         {
-           
-
             stopwatch.Start();
-            
+
             Parallel.ForEach(space.triangles, triangle =>
             {
                 List<Segment> lista = new List<Segment>
@@ -180,7 +155,7 @@ namespace grafa20
                 FillPolygon2(lista);
             });
 
-           ;
+            ;
 
             stopwatch.Stop();
             label2.Text = $"{stopwatch.ElapsedMilliseconds}";
@@ -188,15 +163,10 @@ namespace grafa20
             pictureBox1.Invalidate();
         }
 
-
-
-
-
         public void FillPolygon2(List<Segment> krawedzie)
         {
             float ymin1 = float.MaxValue;
             float ymax1 = float.MinValue;
-
 
             foreach (var segment in krawedzie)
             {
@@ -209,9 +179,9 @@ namespace grafa20
             int ymin = doint(ymin1);
             int ymax = doint(ymax1);
 
-            List<Kubel> aktualna = new List<Kubel>();
+            List<bucket> aktualna = new List<bucket>();
             int y = ymin;
-            List<Kubel>[] kubelki = new List<Kubel>[ymax - ymin + 1];
+            List<bucket>[] bucketki = new List<bucket>[ymax - ymin + 1];
             int licznik = 0;
 
             foreach (var segment in krawedzie)
@@ -224,18 +194,18 @@ namespace grafa20
                 if (m2 == 0) continue;
                 m = m1 / m2;
                 // int mm = (int)Math.Round(m);
-                if (kubelki[i] == null) kubelki[i] = new List<Kubel>();
-                kubelki[i].Add(new Kubel(doint(segment.maxY().Item1), doint(segment.minY().Item2), m));
+                if (bucketki[i] == null) bucketki[i] = new List<bucket>();
+                bucketki[i].Add(new bucket(doint(segment.maxY().Item1), doint(segment.minY().Item2), m));
                 licznik++;
             }
 
             while (licznik != 0 || aktualna.Count != 0)
             {
-                if (kubelki[y - ymin] != null)
+                if (bucketki[y - ymin] != null)
                 {
-                    foreach (var kubel in kubelki[y - ymin])
+                    foreach (var bucket in bucketki[y - ymin])
                     {
-                        aktualna.Add(kubel);
+                        aktualna.Add(bucket);
                         licznik--;
                     }
                 }
@@ -249,24 +219,18 @@ namespace grafa20
 
                     for (int j = (int)przeciecie1.x; j <= (int)przeciecie2.x; j++)
                     {
-
-
                         float u = tofloat(j);
                         float v = tofloat(y);
                         if (j == -1) j = 0;
 
-
                         Vector3 gdzie = new Vector3(u, v, space.Zety[j, y]);
-
 
                         Vector3 aa = space.NormalVectors[j, y];
 
-                        Vector3 wersor = obliczWersorSwiatla(space.swiatlo, gdzie);
+                        Vector3 wersor = CalculateWersorSwiatla(space.swiatlo, gdzie);
                         Color obiektu = space.IO;
                         if (space.normalcolor != null)
                             obiektu = space.ImageColors[j, y];
-
-
 
                         (int r, int g, int bb) = CalculateColor(aa, wersor, new Vector3(0, 0, 1), space.kd, space.ks, space.m, obiektu, space.IL);
                         Vector3 p = new Vector3(j, y, 0);
@@ -277,8 +241,6 @@ namespace grafa20
                         }
                         if (p.X >= 0 && p.Y >= 0 && p.X <= 499 && p.Y <= 499)
                             DrawPixel(r, g, bb, (int)p.X, (int)p.Y);
-
-
                     }
                 }
 
@@ -286,52 +248,41 @@ namespace grafa20
                 y++;
 
                 aktualna.ForEach(element => element.x += element.m);
-
             }
         }
-
-
 
         private void trackBar2_Scroll(object sender, EventArgs e)
         {
             space.swiatlo.X = trackBar2.Value / 10f;
-            //  Vector3.Normalize(space.swiatlo);
+            // Vector3.Normalize(space.swiatlo);
             draw();
-
         }
 
         private void trackBar3_Scroll(object sender, EventArgs e)
         {
             space.swiatlo.Y = trackBar3.Value / 10f;
-            //   Vector3.Normalize(space.swiatlo);
+            // Vector3.Normalize(space.swiatlo);
             draw();
-
         }
 
         private void groupBox1_Enter(object sender, EventArgs e)
         {
-
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
             if (colorDialog1.ShowDialog() == DialogResult.OK)
             {
-
                 space.IO = colorDialog1.Color;
                 space.normalcolor = null;
                 draw();
             }
-
         }
-
-
 
         private void button2_Click_1(object sender, EventArgs e)
         {
             if (colorDialog1.ShowDialog() == DialogResult.OK)
             {
-
                 space.IL = colorDialog1.Color;
                 draw();
             }
@@ -357,13 +308,10 @@ namespace grafa20
                     for (int y = 0; y < resizedImage.Height; y++)
                     {
                         space.ImageColors[x, y] = resizedImage.GetPixel(x, y);
-
                     }
                 }
                 draw();
-
             }
-
         }
 
         private void button4_Click(object sender, EventArgs e)
@@ -377,7 +325,7 @@ namespace grafa20
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
                 string filePath = openFileDialog.FileName;
-               
+
                 Bitmap originalImage = new Bitmap(filePath);
                 Bitmap resizedImage = new Bitmap(originalImage, new Size(500, 500));
                 space.normalmap = resizedImage;
@@ -387,12 +335,10 @@ namespace grafa20
                     for (int y = 0; y < resizedImage.Height; y++)
                     {
                         space.BitmapVector[x, y] = space.ColorToNormalVector(resizedImage.GetPixel(x, y));
-                    
                     }
                 }
-                space.ObliczZiWektory();
+                space.CalculateZandVectors();
                 draw();
-
             }
         }
 
@@ -400,8 +346,6 @@ namespace grafa20
         {
             if (checkBox1.Checked == true)
             {
-
-
                 Bitmap originalImage = new Bitmap(Properties.Resources.normal_map_example);
 
                 Bitmap resizedImage = new Bitmap(originalImage, new Size(500, 500));
@@ -412,16 +356,15 @@ namespace grafa20
                     for (int y = 0; y < resizedImage.Height; y++)
                     {
                         space.BitmapVector[x, y] = space.ColorToNormalVector(resizedImage.GetPixel(x, y));
-
                     }
                 }
-                space.ObliczZiWektory();
+                space.CalculateZandVectors();
                 draw();
             }
             else
             {
                 space.normalmap = null;
-                space.ObliczZiWektory();
+                space.CalculateZandVectors();
                 draw();
             }
         }
@@ -430,8 +373,6 @@ namespace grafa20
         {
             if (checkBox2.Checked == true)
             {
-
-
                 Bitmap originalImage = new Bitmap(Properties.Resources.original);
 
                 Bitmap resizedImage = new Bitmap(originalImage, new Size(500, 500));
@@ -441,10 +382,8 @@ namespace grafa20
                     for (int y = 0; y < resizedImage.Height; y++)
                     {
                         space.ImageColors[x, y] = resizedImage.GetPixel(x, y);
-
                     }
                 }
-
 
                 draw();
             }
@@ -458,21 +397,17 @@ namespace grafa20
 
         private void label4_Click(object sender, EventArgs e)
         {
-
         }
 
         private void label7_Click(object sender, EventArgs e)
         {
-
         }
-
-
 
         private void trackBar6_Scroll(object sender, EventArgs e)
         {
             space.swiatlo.Z = trackBar6.Value / 5.0f;
             label12.Text = $"z: {trackBar6.Value / 5.0f}";
-            //   Vector3.Normalize(space.swiatlo);
+            // Vector3.Normalize(space.swiatlo);
             draw();
         }
 
@@ -506,7 +441,7 @@ namespace grafa20
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            t += 0.08f; 
+            t += 0.08f;
 
             space.swiatlo.X = (cx + a * (float)Math.Cos(t)) / 499.0f;
             space.swiatlo.Y = (cy + b * (float)Math.Sin(t)) / 499.0f;
@@ -533,6 +468,7 @@ namespace grafa20
 
             draw();
         }
+
         private void trackBar4_Scroll(object sender, EventArgs e)
         {
             space.ks = trackBar4.Value / 10f;
@@ -542,7 +478,6 @@ namespace grafa20
 
         private void label10_Click(object sender, EventArgs e)
         {
-
         }
 
         private void trackBar8_Scroll(object sender, EventArgs e)
@@ -555,7 +490,7 @@ namespace grafa20
             MouseEventArgs me = (MouseEventArgs)e;
             Point coordinates = me.Location;
 
-         // rozmiar 500x500
+            // rozmiar 500x500
             float scaleX = 500;
             float scaleY = 500;
 
@@ -563,31 +498,27 @@ namespace grafa20
             {
                 for (int j = 0; j < 4; j++)
                 {
-                  
                     float scaledX = space.BasePoints[i, j].X * scaleX;
                     float scaledY = space.BasePoints[i, j].Y * scaleY;
 
-                  
                     if (Math.Abs(scaledX - coordinates.X) < 10 && Math.Abs(scaledY - coordinates.Y) < 10)
                     {
-                      //klikniecie zmiana z punktu 
+                        //klikniecie zmiana z punktu
                         space.BasePoints[i, j].Z = trackBar8.Value / 10.0f;
                     }
                 }
             }
             space.InitPoints();
-            space.ObliczZiWektory();
+            space.CalculateZandVectors();
             draw();
         }
 
         private void label11_Click(object sender, EventArgs e)
         {
-
         }
 
         private void label12_Click(object sender, EventArgs e)
         {
-           
         }
 
         private void checkBox6_CheckedChanged(object sender, EventArgs e)
@@ -602,9 +533,9 @@ namespace grafa20
                     }
                 }
                 space.swiatlo.Z = 1.0f;
-                space.sfera = true;
+                space.sphere = true;
                 space.InitPoints();
-                space.ObliczZiWektory();
+                space.CalculateZandVectors();
                 draw();
             }
             else
@@ -616,9 +547,9 @@ namespace grafa20
                         DrawPixel(0, 0, 0, i, j);
                     }
                 }
-                space.sfera = false;
+                space.sphere = false;
                 space.InitPoints();
-                space.ObliczZiWektory();
+                space.CalculateZandVectors();
                 draw();
             }
         }
@@ -664,6 +595,9 @@ namespace grafa20
             draw();
         }
 
+        private void Form1_Load(object sender, EventArgs e)
+        {
 
+        }
     }
 }

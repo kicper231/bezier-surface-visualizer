@@ -1,21 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
-using static grafa20.Geometry;
-
+﻿using System.Numerics;
 
 namespace grafa20
 {
     public class Segment
     {
-
         public Vector3 ps;
 
         public Vector3 pe;
-
 
         //public (int, int) maxY()
         //{
@@ -44,8 +35,6 @@ namespace grafa20
         {
             ps = pps;
             pe = ppe;
-
         }
     }
 }
-
