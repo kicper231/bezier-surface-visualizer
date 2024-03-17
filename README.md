@@ -7,9 +7,6 @@ This app shows a mesh from a Bezier surface on XY plane. You can change how fine
 
 - **Adjust Mesh**: Use a slider to make the mesh more or less detailed.
 - **Hide Mesh**: A button to hide/show the mesh.
-- **Fill Triangles**:
-  - **Sort Edges** for last names A-K: Fills triangles by sorting edges.
-  - **Sort Vertices** for last names L-Z: Fills triangles by sorting vertices.
 - **Light and Color**:
   - **Light Model**: Uses light and color to make triangles look real. You can change light color, object color, and how shiny it is.
 - **Moving Light**: Light moves in a spiral. You can stop it if you want.
